@@ -13,7 +13,8 @@ class TaskViewController: UIViewController {
     // MARK: Properties
     var task : Task?
     var model : TaskManagerModel = TaskManagerModel.getInstance()
-    @IBOutlet weak var taskNameLabel: UITextField!
+    @IBOutlet weak var taskNameTextField: UITextField!
+    @IBOutlet weak var saveButton: UIBarButtonItem!
     
     // MARK: ProjectPicker Properties
     @IBOutlet weak var projectPicker: UIPickerView!
@@ -31,15 +32,23 @@ class TaskViewController: UIViewController {
     @IBOutlet weak var pomodoroDurationPicker: UIPickerView!
     private let durationNum = 1 + 90 / 5 // 1 for counting up and others for counting down less than 90 minutes
     
+    fileprivate func load(_ task: Task) {
+        // load data
+        taskNameTextField.text = task.name
+        projectPickerLabel.text = task.project
+        deadlineLabel.text = Utility.dateString(from: task.deadline)
+        pomodoroDurationLabel.text = Utility.durationString(for: task.pomodoroDuration)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        if let task = task { // load data
-            taskNameLabel.text = task.name
-            projectPickerLabel.text = task.project
-            deadlineLabel.text = Utility.dateString(from: task.deadline)
-            pomodoroDurationLabel.text = Utility.durationString(for: task.pomodoroDuration)
+        if let task = task {
+            load(task)
+        } else {
+            task = Task(name: "", deadline: nil, pomodoroDuration: nil, project: "Standalone")
+            load(task!)
         }
         
         // delegate assignment
@@ -54,6 +63,8 @@ class TaskViewController: UIViewController {
         projectPicker.isHidden = true
         projectPicker.delegate = self
         projectPicker.dataSource = self
+        
+        taskNameTextField.delegate = self
     }
 
     @IBAction func deadlineTapped(_ sender: UITapGestureRecognizer) {
@@ -139,8 +150,10 @@ extension TaskViewController : UIPickerViewDelegate, UIPickerViewDataSource {
             switch row {
             case 0:
                 return "Count Up"
+            case 1:
+                return "No Time Devoted"
             default:
-                return "\(row * 5) min"
+                return "\((row - 1) * 5) min"
             }
         } else if (pickerView == projectPicker) {
             return model.getProjects()[row]
@@ -151,10 +164,37 @@ extension TaskViewController : UIPickerViewDelegate, UIPickerViewDataSource {
     func pickerView(_ picker: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if (picker == deadlinePicker) {
             deadlineLabel.text = pickerView(picker, titleForRow: row, forComponent: 0)
+            task?.deadline = Date() + TimeInterval(24 * 3600 * (row - 1))
         } else if (picker == pomodoroDurationPicker) {
             pomodoroDurationLabel.text = pickerView(picker, titleForRow: row, forComponent: 0)
+            if row == 0 {
+                task?.pomodoroDuration = nil
+            } else {
+                task?.pomodoroDuration = TimeInterval((row - 1) * 5 * 60)
+            }
         } else if (picker == projectPicker) {
             projectPickerLabel.text = pickerView(picker, titleForRow: row, forComponent: 0)
+            task?.project = projectPickerLabel.text!
         }
+    }
+}
+
+
+extension TaskViewController : UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        taskNameTextField.resignFirstResponder()
+        return false
+    }
+    
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        saveButton.isEnabled = !(taskNameTextField.text ?? "").isEmpty
+        task?.name = taskNameTextField.text ?? ""
+        return true
+    }
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        saveButton.isEnabled = false
+        return true
     }
 }

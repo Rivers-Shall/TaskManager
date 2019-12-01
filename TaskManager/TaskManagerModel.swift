@@ -22,7 +22,7 @@ class TaskManagerModel {
 
     // MARK: Instance Member
     private var projects = ["Stand Alone"]
-    private var tasks = [Task]()
+    private var tasks = [Task(name: "task1", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: "Stand Alone")]
     
     // MARK: Instance Method
     func getProjects() -> [Project] {
@@ -37,11 +37,11 @@ class TaskManagerModel {
     
     func addOrUpdate(task : Task, in project : Project) {
         let taskIndex = tasks.firstIndex { taskInList in
-            taskInList.name == task.name && taskInList.project == project
+            taskInList.id == task.id
         }
 
         if let taskIndex = taskIndex { // update
-            tasks.replaceSubrange(taskIndex...taskIndex, with: [task])
+            tasks[taskIndex] = task
         } else { // add
             tasks.append(task)
         }

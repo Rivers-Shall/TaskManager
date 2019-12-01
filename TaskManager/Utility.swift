@@ -15,13 +15,17 @@ class Utility {
         return userCalendar.dateComponents([.year, .month, .day, .weekday], from: date)
     }
     
-    static func dateString(from date : Date) -> String {
-        let today = dateComponents(from: Date())
-        let dc = dateComponents(from: date)
-        if today.year == dc.year {
-            return "\(userCalendar.shortWeekdaySymbols[dc.weekday! - 1]), \(dc.day!) \(userCalendar.monthSymbols[dc.month! - 1])"
+    static func dateString(from date : Date?) -> String {
+        if let date = date {
+            let today = dateComponents(from: Date())
+            let dc = dateComponents(from: date)
+            if today.year == dc.year {
+                return "\(userCalendar.shortWeekdaySymbols[dc.weekday! - 1]), \(dc.day!) \(userCalendar.monthSymbols[dc.month! - 1])"
+            } else {
+                return "\(userCalendar.shortWeekdaySymbols[dc.weekday! - 1]), \(dc.day!) \(userCalendar.monthSymbols[dc.month! - 1]) \(dc.year!)"
+            }
         } else {
-            return "\(userCalendar.shortWeekdaySymbols[dc.weekday! - 1]), \(dc.day!) \(userCalendar.monthSymbols[dc.month! - 1]) \(dc.year!)"
+            return "No Deadline"
         }
     }
     
