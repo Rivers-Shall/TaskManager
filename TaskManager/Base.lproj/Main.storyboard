@@ -79,6 +79,9 @@
                                             </label>
                                         </subviews>
                                         <gestureRecognizers/>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="wRi-0G-xz4" appends="YES" id="bRC-Rk-iE2"/>
+                                        </connections>
                                     </stackView>
                                     <pickerView hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z6G-NZ-vjC">
                                         <rect key="frame" x="0.0" y="0.0" width="373" height="0.0"/>
@@ -145,6 +148,7 @@
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="BrB-YS-T0l" firstAttribute="top" secondItem="f6I-Gn-BJR" secondAttribute="bottom" constant="15" id="AOx-is-KJF"/>
                             <constraint firstItem="8HQ-zR-6Wx" firstAttribute="top" secondItem="BrB-YS-T0l" secondAttribute="bottom" constant="15" id="CaL-vI-JLB"/>
@@ -163,6 +167,9 @@
                             <constraint firstItem="afZ-91-mvt" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="wbD-PE-b32"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="D6l-HF-T5J" appends="YES" id="HqC-D0-QOy"/>
+                        </connections>
                     </view>
                     <connections>
                         <outlet property="deadlineLabel" destination="G6b-3R-gp8" id="MgT-7C-itb"/>
@@ -171,6 +178,7 @@
                         <outlet property="pomodoroDurationPicker" destination="E0A-tC-jPh" id="2hS-gN-OWm"/>
                         <outlet property="projectPicker" destination="z6G-NZ-vjC" id="FfB-Se-wmo"/>
                         <outlet property="projectPickerLabel" destination="Y2x-hG-y5l" id="VIu-Th-YWz"/>
+                        <outlet property="taskNameLabel" destination="afZ-91-mvt" id="OyQ-CR-qCI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -182,6 +190,16 @@
                 <tapGestureRecognizer id="gyE-f8-lOf" userLabel="duration Tap">
                     <connections>
                         <action selector="durationTapped:" destination="BYZ-38-t0r" id="j9q-6N-nSf"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="wRi-0G-xz4" userLabel="project Tap">
+                    <connections>
+                        <action selector="projectTapped:" destination="BYZ-38-t0r" id="N1O-Qd-Opr"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="D6l-HF-T5J" userLabel="scene Tap">
+                    <connections>
+                        <action selector="sceneTapped:" destination="BYZ-38-t0r" id="3x6-Qs-iGj"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>
