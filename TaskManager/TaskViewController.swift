@@ -12,6 +12,8 @@ class TaskViewController: UIViewController {
 
     // MARK: Properties
     var task : Task?
+    var model : TaskManagerModel = TaskManagerModel.getInstance()
+    @IBOutlet weak var taskNameLabel: UITextField!
     
     // MARK: ProjectPicker Properties
     @IBOutlet weak var projectPicker: UIPickerView!
@@ -33,23 +35,64 @@ class TaskViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
+        if let task = task { // load data
+            taskNameLabel.text = task.name
+            projectPickerLabel.text = task.project
+            deadlineLabel.text = Utility.dateString(from: task.deadline)
+            pomodoroDurationLabel.text = Utility.durationString(for: task.pomodoroDuration)
+        }
+        
+        // delegate assignment
         deadlinePicker.isHidden = true
         deadlinePicker.delegate = self
         deadlinePicker.dataSource = self
         
+        pomodoroDurationPicker.isHidden = true
         pomodoroDurationPicker.delegate = self
         pomodoroDurationPicker.dataSource = self
+        
+        projectPicker.isHidden = true
+        projectPicker.delegate = self
+        projectPicker.dataSource = self
     }
 
     @IBAction func deadlineTapped(_ sender: UITapGestureRecognizer) {
-        UIView.animate(withDuration: 0.3) {
-            self.deadlinePicker.isHidden = !self.deadlinePicker.isHidden
-        }
+        toggle(picker: deadlinePicker)
+        hide(picker: projectPicker)
+        hide(picker: pomodoroDurationPicker)
     }
     
     @IBAction func durationTapped(_ sender: UITapGestureRecognizer) {
+        toggle(picker: pomodoroDurationPicker)
+        hide(picker: projectPicker)
+        hide(picker: deadlinePicker)
+    }
+    
+    @IBAction func projectTapped(_ sender: UITapGestureRecognizer) {
+        toggle(picker: projectPicker)
+        hide(picker: pomodoroDurationPicker)
+        hide(picker: deadlinePicker)
+    }
+    
+    @IBAction func sceneTapped(_ sender: Any) {
         UIView.animate(withDuration: 0.3) {
-            self.pomodoroDurationPicker.isHidden = !self.pomodoroDurationPicker.isHidden
+            self.projectPicker.isHidden = true
+            self.deadlinePicker.isHidden = true
+            self.pomodoroDurationPicker.isHidden = true
+        }
+    }
+    
+    private func toggle(picker : UIPickerView) {
+        UIView.animate(withDuration: 0.3) {
+            picker.isHidden = !picker.isHidden
+        }
+    }
+    
+    private func hide(picker : UIPickerView) {
+        if !picker.isHidden {
+            UIView.animate(withDuration: 0.3, delay: 0.3, options: .curveEaseOut, animations: {
+                picker.isHidden = true
+            }, completion: nil)
         }
     }
 }
@@ -62,6 +105,8 @@ extension TaskViewController : UIPickerViewDelegate, UIPickerViewDataSource {
             return 1
         } else if (pickerView == pomodoroDurationPicker) {
             return 1
+        } else if (pickerView == projectPicker) {
+            return 1
         }
         fatalError("Unkown UIPickerView")
     }
@@ -71,6 +116,8 @@ extension TaskViewController : UIPickerViewDelegate, UIPickerViewDataSource {
             return deadlineDateNum
         } else if (pickerView == pomodoroDurationPicker) {
             return durationNum
+        } else if (pickerView == projectPicker) {
+            return model.getProjects().count
         }
         fatalError("Unkown UIPickerView")
     }
@@ -85,15 +132,8 @@ extension TaskViewController : UIPickerViewDelegate, UIPickerViewDataSource {
             case 2:
                 return "Tomorrow"
             default:
-                let today = Date()
-                let deadline = today + TimeInterval((row - 1) * 24 * 3600)
-                let todayDate = userCalendar.dateComponents([.year, .month, .day, .weekday], from: today)
-                let deadlineDate = userCalendar.dateComponents([.year, .month, .day, .weekday], from: deadline)
-                if (deadlineDate.year != todayDate.year) {
-                    return "\(userCalendar.shortWeekdaySymbols[deadlineDate.weekday! - 1]), \(deadlineDate.day!) \(userCalendar.monthSymbols[deadlineDate.month! - 1]) \(deadlineDate.year!)"
-                } else {
-                    return "\(userCalendar.shortWeekdaySymbols[deadlineDate.weekday! - 1]), \(deadlineDate.day!) \(userCalendar.monthSymbols[deadlineDate.month! - 1])"
-                }
+                let deadline = Date() + TimeInterval((row - 1) * 24 * 3600)
+                return Utility.dateString(from : deadline)
             }
         } else if (pickerView == pomodoroDurationPicker) {
             switch row {
@@ -102,6 +142,8 @@ extension TaskViewController : UIPickerViewDelegate, UIPickerViewDataSource {
             default:
                 return "\(row * 5) min"
             }
+        } else if (pickerView == projectPicker) {
+            return model.getProjects()[row]
         }
         fatalError("Unkown UIPickerView")
     }
@@ -111,6 +153,8 @@ extension TaskViewController : UIPickerViewDelegate, UIPickerViewDataSource {
             deadlineLabel.text = pickerView(picker, titleForRow: row, forComponent: 0)
         } else if (picker == pomodoroDurationPicker) {
             pomodoroDurationLabel.text = pickerView(picker, titleForRow: row, forComponent: 0)
+        } else if (picker == projectPicker) {
+            projectPickerLabel.text = pickerView(picker, titleForRow: row, forComponent: 0)
         }
     }
 }
