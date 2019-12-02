@@ -47,9 +47,10 @@ class TaskViewController: UIViewController {
         if let task = task {
             load(task)
         } else {
-            task = Task(name: "", deadline: nil, pomodoroDuration: nil, project: "Standalone")
+            task = Task(name: "", deadline: nil, pomodoroDuration: nil, project: "Stand Alone")
             load(task!)
         }
+        updateSaveButtonState()
         
         // delegate assignment
         deadlinePicker.isHidden = true
@@ -182,13 +183,17 @@ extension TaskViewController : UIPickerViewDelegate, UIPickerViewDataSource {
 
 extension TaskViewController : UITextFieldDelegate {
     
+    fileprivate func updateSaveButtonState() {
+        saveButton.isEnabled = !(taskNameTextField.text ?? "").isEmpty
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         taskNameTextField.resignFirstResponder()
         return false
     }
-    
+
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        saveButton.isEnabled = !(taskNameTextField.text ?? "").isEmpty
+        updateSaveButtonState()
         task?.name = taskNameTextField.text ?? ""
         return true
     }

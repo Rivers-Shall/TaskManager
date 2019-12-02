@@ -50,4 +50,8 @@ class TaskManagerModel {
     func add(project : Project) {
         projects.append(project)
     }
+    
+    func getTask(in indexPath : IndexPath) -> Task {
+        return getTasks(in: getProjects()[indexPath.section])[indexPath.row]
+    }
 }
