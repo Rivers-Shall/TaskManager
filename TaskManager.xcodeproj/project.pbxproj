@@ -21,6 +21,7 @@
 		734473A323938EC90081BDF4 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734473A223938EC90081BDF4 /* Task.swift */; };
 		734473A52393922E0081BDF4 /* TaskManagerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734473A42393922E0081BDF4 /* TaskManagerModel.swift */; };
 		73B4DA51239CD4E400FF34F9 /* ProjectTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B4DA50239CD4E400FF34F9 /* ProjectTableViewCell.swift */; };
+		73B4DA59239CF61E00FF34F9 /* ColorCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B4DA58239CF61E00FF34F9 /* ColorCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,7 @@
 		734473A223938EC90081BDF4 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		734473A42393922E0081BDF4 /* TaskManagerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskManagerModel.swift; sourceTree = "<group>"; };
 		73B4DA50239CD4E400FF34F9 /* ProjectTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectTableViewCell.swift; sourceTree = "<group>"; };
+		73B4DA58239CF61E00FF34F9 /* ColorCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +98,7 @@
 				73B4DA53239CD52800FF34F9 /* model */,
 				73B4DA52239CD50200FF34F9 /* TableView */,
 				73447380239362FC0081BDF4 /* TaskViewController.swift */,
+				73B4DA58239CF61E00FF34F9 /* ColorCollectionViewCell.swift */,
 				732CC2AD23948F5B008426E5 /* TimerViewController.swift */,
 				732CC2A72393D6FA008426E5 /* Utility.swift */,
 				7344737C239362FC0081BDF4 /* AppDelegate.swift */,
@@ -245,6 +248,7 @@
 				73B4DA51239CD4E400FF34F9 /* ProjectTableViewCell.swift in Sources */,
 				732CC2A82393D6FA008426E5 /* Utility.swift in Sources */,
 				73447381239362FC0081BDF4 /* TaskViewController.swift in Sources */,
+				73B4DA59239CF61E00FF34F9 /* ColorCollectionViewCell.swift in Sources */,
 				7344737D239362FC0081BDF4 /* AppDelegate.swift in Sources */,
 				7344737F239362FC0081BDF4 /* SceneDelegate.swift in Sources */,
 			);

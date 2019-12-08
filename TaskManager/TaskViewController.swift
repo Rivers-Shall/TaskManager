@@ -32,12 +32,20 @@ class TaskViewController: UIViewController {
     @IBOutlet weak var pomodoroDurationPicker: UIPickerView!
     private let durationNum = 1 + 90 / 5 // 1 for counting up and others for counting down less than 90 minutes
     
+    // MARK: ColorCollection Properties
+
+    @IBOutlet weak var ColorCollectionView: UICollectionView!
+    @IBOutlet weak var ColorLabel: UILabel!
+    
+    var toggleViews = [UIView]()
+    
     fileprivate func load(_ task: Task) {
         // load data
         taskNameTextField.text = task.name
         projectPickerLabel.text = task.project
         deadlineLabel.text = Utility.dateString(from: task.deadline)
         pomodoroDurationLabel.text = Utility.durationString(for: task.pomodoroDuration)
+        ColorLabel.backgroundColor = task.idColor
     }
     
     override func viewDidLoad() {
@@ -66,45 +74,49 @@ class TaskViewController: UIViewController {
         projectPicker.dataSource = self
         
         taskNameTextField.delegate = self
+        
+        ColorCollectionView.delegate = self
+        ColorCollectionView.dataSource = self
+        
+        toggleViews += [deadlinePicker, projectPicker, pomodoroDurationPicker, ColorCollectionView]
     }
 
+    // 三个按钮，只要打开其中一个就会关闭其他两个
     @IBAction func deadlineTapped(_ sender: UITapGestureRecognizer) {
         toggle(picker: deadlinePicker)
-        hide(picker: projectPicker)
-        hide(picker: pomodoroDurationPicker)
+        hide(except: deadlinePicker)
     }
     
     @IBAction func durationTapped(_ sender: UITapGestureRecognizer) {
         toggle(picker: pomodoroDurationPicker)
-        hide(picker: projectPicker)
-        hide(picker: deadlinePicker)
+        hide(except: pomodoroDurationPicker)
     }
     
     @IBAction func projectTapped(_ sender: UITapGestureRecognizer) {
         toggle(picker: projectPicker)
-        hide(picker: pomodoroDurationPicker)
-        hide(picker: deadlinePicker)
+        hide(except: projectPicker)
     }
     
-    @IBAction func sceneTapped(_ sender: Any) {
-        UIView.animate(withDuration: 0.3) {
-            self.projectPicker.isHidden = true
-            self.deadlinePicker.isHidden = true
-            self.pomodoroDurationPicker.isHidden = true
-        }
+    @IBAction func colorTapped(_ sender: UITapGestureRecognizer) {
+        toggle(picker: ColorCollectionView)
+        hide(except: ColorCollectionView)
     }
     
-    private func toggle(picker : UIPickerView) {
+    // 两个private的动画方法，用于在隐藏和显示之间切换，
+    private func toggle(picker : UIView) {
         UIView.animate(withDuration: 0.3) {
             picker.isHidden = !picker.isHidden
         }
     }
     
-    private func hide(picker : UIPickerView) {
-        if !picker.isHidden {
-            UIView.animate(withDuration: 0.3, delay: 0.3, options: .curveEaseOut, animations: {
-                picker.isHidden = true
-            }, completion: nil)
+    // 用于隐藏
+    private func hide(except view : UIView) {
+        for toggleView in toggleViews {
+            if toggleView != view && !toggleView.isHidden {
+                UIView.animate(withDuration: 0.3, delay: 0.3, options: .curveEaseOut, animations: {
+                    toggleView.isHidden = true
+                }, completion: nil)
+            }
         }
     }
 }
@@ -180,9 +192,10 @@ extension TaskViewController : UIPickerViewDelegate, UIPickerViewDataSource {
     }
 }
 
-
+// MARK: UITextFieldDelegate
 extension TaskViewController : UITextFieldDelegate {
     
+    // 只有填写了名称，才可以保存
     fileprivate func updateSaveButtonState() {
         saveButton.isEnabled = !(taskNameTextField.text ?? "").isEmpty
     }
@@ -201,5 +214,27 @@ extension TaskViewController : UITextFieldDelegate {
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         saveButton.isEnabled = false
         return true
+    }
+}
+
+extension TaskViewController : UICollectionViewDelegate, UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return TaskManagerModel.colors.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ColorCollectionViewCell", for: indexPath) as? ColorCollectionViewCell
+        cell?.backgroundColor = TaskManagerModel.colors[indexPath.row]
+        return cell!
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath) as? ColorCollectionViewCell
+        ColorLabel.backgroundColor = cell?.backgroundColor
+        task?.idColor = ColorLabel.backgroundColor! 
     }
 }

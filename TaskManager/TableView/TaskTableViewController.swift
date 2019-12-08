@@ -54,6 +54,7 @@ class TaskTableViewController: UITableViewController {
 
             if let cell = cell {
                 cell.taskNameLabel.text = task.name
+                cell.backgroundColor = task.idColor
                 if let duration = task.pomodoroDuration {
                     cell.taskDescriptionLabel.text = Utility.durationString(for: duration)
                 } else {
@@ -91,13 +92,7 @@ class TaskTableViewController: UITableViewController {
         }
         return (projectIndex, nil)
     }
-    
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return CGFloat(30)
-    }
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return model.getProjects()[section]
-    }
+
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return CGFloat(80)
@@ -167,6 +162,7 @@ class TaskTableViewController: UITableViewController {
         }
         let (projectIndex, _) = projectAndTaskIndex(of: cellIndex.row)
         projectExpanded[projectIndex] = !projectExpanded[projectIndex]!
+        
         // 加载或者删除任务格子
         let tasksCount = model.getTasks(in: model.getProjects()[projectIndex]).count
         var indexPaths = [IndexPath]()

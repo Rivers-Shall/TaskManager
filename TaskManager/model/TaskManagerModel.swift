@@ -2,18 +2,32 @@
 //  TaskManagerModel.swift
 //  TaskManager
 //
-//  Created by 肖江 on 2019/12/1.
-//  Copyright © 2019 rivers. All rights reserved.
+//  Created by 肖江 on 0.219/12/1.
+//  Copyright © 0.219 rivers. All rights reserved.
 //
 
 import Foundation
-
+import UIKit
 
 class TaskManagerModel {
     typealias Project = String
 
     // MARK: Static Member
     static let instance : TaskManagerModel = TaskManagerModel()
+    static let colors = [
+        UIColor.lightGray,
+        UIColor(red: CGFloat(1), green: CGFloat(0), blue: CGFloat(0), alpha: CGFloat(0.5)),
+        UIColor(red: CGFloat(0), green: CGFloat(1), blue: CGFloat(0), alpha: CGFloat(0.5)),
+        UIColor(red: CGFloat(0), green: CGFloat(0), blue: CGFloat(1), alpha: CGFloat(0.5)),
+        UIColor(red: CGFloat(1), green: CGFloat(1), blue: CGFloat(0), alpha: CGFloat(0.5)),
+        UIColor(red: CGFloat(1), green: CGFloat(0.5), blue: CGFloat(0.5), alpha: CGFloat(0.5)),
+        UIColor(red: CGFloat(1), green: CGFloat(0), blue: CGFloat(1), alpha: CGFloat(0.5)),
+        UIColor(red: CGFloat(1), green: CGFloat(0.5), blue: CGFloat(0), alpha: CGFloat(0.5)),
+        UIColor(red: CGFloat(1), green: CGFloat(0), blue: CGFloat(0.5), alpha: CGFloat(0.5)),
+        UIColor(red: CGFloat(0.5), green: CGFloat(0), blue: CGFloat(1), alpha: CGFloat(0.5)),
+        UIColor(red: CGFloat(0.5), green: CGFloat(1), blue: CGFloat(0), alpha: CGFloat(0.5)),
+        UIColor(red: CGFloat(0.5), green: CGFloat(1), blue: CGFloat(0), alpha: CGFloat(0.5)),
+    ]
     
     // MARK: Static Method
     static func getInstance() -> TaskManagerModel {

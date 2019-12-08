@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 struct Task {
     typealias Project = String
@@ -25,6 +26,7 @@ struct Task {
     var pomodoroUsed : Int
     var project : Project
     var id : Int
+    var idColor : UIColor = UIColor.gray
     
     let userCalendar = Calendar.current
     
