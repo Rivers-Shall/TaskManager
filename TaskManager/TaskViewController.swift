@@ -12,6 +12,7 @@ class TaskViewController: UIViewController {
 
     // MARK: Properties
     var task : Task?
+    var defaultProject = "Stand Alone"
     var model : TaskManagerModel = TaskManagerModel.getInstance()
     @IBOutlet weak var taskNameTextField: UITextField!
     @IBOutlet weak var saveButton: UIBarButtonItem!
@@ -55,7 +56,7 @@ class TaskViewController: UIViewController {
         if let task = task {
             load(task)
         } else {
-            task = Task(name: "", deadline: nil, pomodoroDuration: nil, project: "Stand Alone")
+            task = Task(name: "", deadline: nil, pomodoroDuration: nil, project: defaultProject)
             load(task!)
         }
         updateSaveButtonState()
@@ -118,6 +119,12 @@ class TaskViewController: UIViewController {
                 }, completion: nil)
             }
         }
+    }
+    
+    // MARK: Navigation
+    
+    @IBAction func cancelAddNewTask(_ sender: UIBarButtonItem) {
+        navigationController?.popViewController(animated: true)
     }
 }
 

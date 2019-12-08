@@ -70,6 +70,7 @@ class TaskTableViewController: UITableViewController {
             let project = model.getProjects()[projectIndex]
             cell?.projectNameLabel.text = project
             cell?.projectExpandButton.setTitle(projectExpanded[projectIndex]! ? "V" : "<", for: .normal)
+            cell?.selectionStyle = .none
             return cell!
         }
     }
@@ -98,6 +99,24 @@ class TaskTableViewController: UITableViewController {
         return CGFloat(80)
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let (projectIndex, _) = projectAndTaskIndex(of: indexPath.row)
+        projectExpanded[projectIndex] = !projectExpanded[projectIndex]!
+        
+        let cell = tableView.cellForRow(at: indexPath) as? ProjectTableViewCell
+        cell?.projectExpandButton.setTitle(projectExpanded[projectIndex]! ? "V" : "<", for: .normal)
+        // 加载或者删除任务格子
+        let tasksCount = model.getTasks(in: model.getProjects()[projectIndex]).count
+        var indexPaths = [IndexPath]()
+        for index in indexPath.row + 1...indexPath.row + tasksCount {
+            indexPaths += [IndexPath(row: index, section: 0)]
+        }
+        if projectExpanded[projectIndex]! {
+            tableView.insertRows(at: indexPaths, with: .automatic)
+        } else {
+            tableView.deleteRows(at: indexPaths, with: .automatic)
+        }
+    }
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -123,13 +142,28 @@ class TaskTableViewController: UITableViewController {
                 fatalError("sender not Button")
             }
             guard let senderCell = sender.superview?.superview?.superview as? TaskTableViewCell else {
-                fatalError("sender button not in Cell")
+                fatalError("sender button not in TaskTableViewCell")
             }
             guard let indexPath = tableView.indexPath(for: senderCell) else {
                 fatalError("sender cell ont in table")
             }
             let (projectIndex, taskIndex) = projectAndTaskIndex(of: indexPath.row)
             destTimerView.pomodoroTime = model.getTask(taskIndex!, in: projectIndex).pomodoroDuration ?? 0
+        case "AddNewTask":
+            guard let destTaskView = segue.destination as? TaskViewController else {
+                fatalError("showDetail not to taskView")
+            }
+            guard let sender = sender as? UIButton else {
+                fatalError("sender not Button")
+            }
+            guard let senderCell = sender.superview?.superview?.superview as? ProjectTableViewCell else {
+                fatalError("sender button not in ProjectTableViewCell")
+            }
+            guard let indexPath = tableView.indexPath(for: senderCell) else {
+                fatalError("sender cell ont in table")
+            }
+            let (projectIndex, _) = projectAndTaskIndex(of: indexPath.row)
+            destTaskView.defaultProject = model.getProjects()[projectIndex]
         case "AddTask":
             break
         default:
@@ -153,27 +187,13 @@ class TaskTableViewController: UITableViewController {
     //MARK: Table Expand
     
     @IBAction func projectExpandButtonTapped(_ sender: UIButton) {
-        sender.setTitle((sender.titleLabel?.text == "<") ? "V" : "<", for: .normal)
         guard let cell = sender.superview?.superview?.superview as? ProjectTableViewCell else {
             fatalError("Not a project cell")
         }
         guard let cellIndex = tableView.indexPath(for: cell) else {
             fatalError("Cell not in the table")
         }
-        let (projectIndex, _) = projectAndTaskIndex(of: cellIndex.row)
-        projectExpanded[projectIndex] = !projectExpanded[projectIndex]!
-        
-        // 加载或者删除任务格子
-        let tasksCount = model.getTasks(in: model.getProjects()[projectIndex]).count
-        var indexPaths = [IndexPath]()
-        for index in cellIndex.row + 1...cellIndex.row + tasksCount {
-            indexPaths += [IndexPath(row: index, section: 0)]
-        }
-        if projectExpanded[projectIndex]! {
-            tableView.insertRows(at: indexPaths, with: .automatic)
-        } else {
-            tableView.deleteRows(at: indexPaths, with: .automatic)
-        }
+        tableView(tableView, didSelectRowAt: cellIndex)
     }
     
 }

@@ -101,7 +101,7 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                                     <state key="normal" title="+"/>
                                                     <connections>
-                                                        <action selector="addButtonTapped:" destination="hPB-jH-apT" eventType="touchUpInside" id="wAd-xx-Uve"/>
+                                                        <segue destination="BYZ-38-t0r" kind="show" identifier="AddNewTask" id="TQC-UO-uQ3"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -444,7 +444,7 @@
                     <navigationItem key="navigationItem" id="cz1-JQ-8jC">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="ZDt-Ce-GAZ">
                             <connections>
-                                <segue destination="0iU-v7-was" kind="unwind" unwindAction="unwindToTaskTable:" id="e93-09-HYT"/>
+                                <action selector="cancelAddNewTask:" destination="BYZ-38-t0r" id="4Uf-68-tyI"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="2e2-tB-soc">
@@ -565,6 +565,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="gl0-yy-JEX"/>
+        <segue reference="TQC-UO-uQ3"/>
     </inferredMetricsTieBreakers>
 </document>
