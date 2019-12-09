@@ -19,14 +19,14 @@ class TaskManagerModel {
         UIColor(red: CGFloat(1), green: CGFloat(0), blue: CGFloat(0), alpha: CGFloat(0.5)),
         UIColor(red: CGFloat(0), green: CGFloat(1), blue: CGFloat(0), alpha: CGFloat(0.5)),
         UIColor(red: CGFloat(0), green: CGFloat(0), blue: CGFloat(1), alpha: CGFloat(0.5)),
-        UIColor(red: CGFloat(1), green: CGFloat(1), blue: CGFloat(0), alpha: CGFloat(0.5)),
+        UIColor(red: CGFloat(1), green: CGFloat(0.2), blue: CGFloat(0.5), alpha: CGFloat(0.7)),
         UIColor(red: CGFloat(1), green: CGFloat(0.5), blue: CGFloat(0.5), alpha: CGFloat(0.5)),
         UIColor(red: CGFloat(1), green: CGFloat(0), blue: CGFloat(1), alpha: CGFloat(0.5)),
         UIColor(red: CGFloat(1), green: CGFloat(0.5), blue: CGFloat(0), alpha: CGFloat(0.5)),
         UIColor(red: CGFloat(1), green: CGFloat(0), blue: CGFloat(0.5), alpha: CGFloat(0.5)),
         UIColor(red: CGFloat(0.5), green: CGFloat(0), blue: CGFloat(1), alpha: CGFloat(0.5)),
-        UIColor(red: CGFloat(0.5), green: CGFloat(1), blue: CGFloat(0), alpha: CGFloat(0.5)),
-        UIColor(red: CGFloat(0.5), green: CGFloat(1), blue: CGFloat(0), alpha: CGFloat(0.5)),
+        UIColor(red: CGFloat(0.5), green: CGFloat(0.2), blue: CGFloat(0.7), alpha: CGFloat(0.9)),
+        UIColor(red: CGFloat(0.9), green: CGFloat(0.1), blue: CGFloat(0.3), alpha: CGFloat(0.9)),
     ]
     
     // MARK: Static Method
@@ -55,7 +55,13 @@ class TaskManagerModel {
         }
 
         if let taskIndex = taskIndex { // update
-            tasks[taskIndex] = task
+            if tasks[taskIndex].project != project {
+                // 如果项目改变，那么就删除而后插入
+                tasks.remove(at: taskIndex)
+                tasks.insert(task, at: 0)
+            } else {
+                tasks[taskIndex] = task
+            }
         } else { // add
             tasks.append(task)
         }

@@ -100,21 +100,23 @@ class TaskTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let (projectIndex, _) = projectAndTaskIndex(of: indexPath.row)
-        projectExpanded[projectIndex] = !projectExpanded[projectIndex]!
-        
-        let cell = tableView.cellForRow(at: indexPath) as? ProjectTableViewCell
-        cell?.projectExpandButton.setTitle(projectExpanded[projectIndex]! ? "V" : "<", for: .normal)
-        // 加载或者删除任务格子
-        let tasksCount = model.getTasks(in: model.getProjects()[projectIndex]).count
-        var indexPaths = [IndexPath]()
-        for index in indexPath.row + 1...indexPath.row + tasksCount {
-            indexPaths += [IndexPath(row: index, section: 0)]
-        }
-        if projectExpanded[projectIndex]! {
-            tableView.insertRows(at: indexPaths, with: .automatic)
-        } else {
-            tableView.deleteRows(at: indexPaths, with: .automatic)
+        let (projectIndex, taskIndex) = projectAndTaskIndex(of: indexPath.row)
+        if taskIndex == nil {
+            projectExpanded[projectIndex] = !projectExpanded[projectIndex]!
+            
+            let cell = tableView.cellForRow(at: indexPath) as? ProjectTableViewCell
+            cell?.projectExpandButton.setTitle(projectExpanded[projectIndex]! ? "V" : "<", for: .normal)
+            // 加载或者删除任务格子
+            let tasksCount = model.getTasks(in: model.getProjects()[projectIndex]).count
+            var indexPaths = [IndexPath]()
+            for index in indexPath.row + 1...indexPath.row + tasksCount {
+                indexPaths += [IndexPath(row: index, section: 0)]
+            }
+            if projectExpanded[projectIndex]! {
+                tableView.insertRows(at: indexPaths, with: .automatic)
+            } else {
+                tableView.deleteRows(at: indexPaths, with: .automatic)
+            }
         }
     }
     // MARK: - Navigation
@@ -173,13 +175,12 @@ class TaskTableViewController: UITableViewController {
     
     @IBAction func unwindToTaskTable(_ sender : UIStoryboardSegue) {
         if let taskController = sender.source as? TaskViewController, let newTask = taskController.task {
-            if let selectedPath = tableView.indexPathForSelectedRow {
+            if let _ = tableView.indexPathForSelectedRow {
                 model.addOrUpdate(task: newTask, in: newTask.project)
-                tableView.reloadRows(at: [selectedPath], with: .automatic)
+                tableView.reloadData()
             } else {
-                let newIndexPath = IndexPath(row: model.getTasks(in: newTask.project).count, section: model.getProjects().firstIndex(of: newTask.project) ?? 0)
                 model.addOrUpdate(task: newTask, in: newTask.project)
-                tableView.insertRows(at: [newIndexPath], with: .automatic)
+                tableView.reloadData()
             }
         }
     }
