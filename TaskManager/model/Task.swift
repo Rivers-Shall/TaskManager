@@ -10,7 +10,6 @@ import Foundation
 import UIKit
 
 struct Task {
-    typealias Project = String
     
     static var validID = 0
     static func getID() -> Int {

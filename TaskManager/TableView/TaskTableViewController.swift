@@ -68,7 +68,7 @@ class TaskTableViewController: UITableViewController {
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ProjectTableViewCell", for: indexPath) as? ProjectTableViewCell
             let project = model.getProjects()[projectIndex]
-            cell?.projectNameLabel.text = project
+            cell?.projectNameLabel.text = project.name
             cell?.projectExpandButton.setTitle(projectExpanded[projectIndex]! ? "V" : "<", for: .normal)
             cell?.selectionStyle = .none
             return cell!
@@ -99,26 +99,6 @@ class TaskTableViewController: UITableViewController {
         return CGFloat(80)
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let (projectIndex, taskIndex) = projectAndTaskIndex(of: indexPath.row)
-        if taskIndex == nil {
-            projectExpanded[projectIndex] = !projectExpanded[projectIndex]!
-            
-            let cell = tableView.cellForRow(at: indexPath) as? ProjectTableViewCell
-            cell?.projectExpandButton.setTitle(projectExpanded[projectIndex]! ? "V" : "<", for: .normal)
-            // 加载或者删除任务格子
-            let tasksCount = model.getTasks(in: model.getProjects()[projectIndex]).count
-            var indexPaths = [IndexPath]()
-            for index in indexPath.row + 1...indexPath.row + tasksCount {
-                indexPaths += [IndexPath(row: index, section: 0)]
-            }
-            if projectExpanded[projectIndex]! {
-                tableView.insertRows(at: indexPaths, with: .automatic)
-            } else {
-                tableView.deleteRows(at: indexPaths, with: .automatic)
-            }
-        }
-    }
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -191,10 +171,27 @@ class TaskTableViewController: UITableViewController {
         guard let cell = sender.superview?.superview?.superview as? ProjectTableViewCell else {
             fatalError("Not a project cell")
         }
-        guard let cellIndex = tableView.indexPath(for: cell) else {
+        guard let indexPath = tableView.indexPath(for: cell) else {
             fatalError("Cell not in the table")
         }
-        tableView(tableView, didSelectRowAt: cellIndex)
+        let (projectIndex, taskIndex) = projectAndTaskIndex(of: indexPath.row)
+        if taskIndex == nil {
+            projectExpanded[projectIndex] = !projectExpanded[projectIndex]!
+            
+            let cell = tableView.cellForRow(at: indexPath) as? ProjectTableViewCell
+            cell?.projectExpandButton.setTitle(projectExpanded[projectIndex]! ? "V" : "<", for: .normal)
+            // 加载或者删除任务格子
+            let tasksCount = model.getTasks(in: model.getProjects()[projectIndex]).count
+            var indexPaths = [IndexPath]()
+            for index in indexPath.row + 1...indexPath.row + tasksCount {
+                indexPaths += [IndexPath(row: index, section: 0)]
+            }
+            if projectExpanded[projectIndex]! {
+                tableView.insertRows(at: indexPaths, with: .automatic)
+            } else {
+                tableView.deleteRows(at: indexPaths, with: .automatic)
+            }
+        }
     }
     
 }

@@ -12,7 +12,7 @@ class TaskViewController: UIViewController {
 
     // MARK: Properties
     var task : Task?
-    var defaultProject = "Stand Alone"
+    var defaultProject : Project?
     var model : TaskManagerModel = TaskManagerModel.getInstance()
     @IBOutlet weak var taskNameTextField: UITextField!
     @IBOutlet weak var saveButton: UIBarButtonItem!
@@ -43,7 +43,7 @@ class TaskViewController: UIViewController {
     fileprivate func load(_ task: Task) {
         // load data
         taskNameTextField.text = task.name
-        projectPickerLabel.text = task.project
+        projectPickerLabel.text = task.project.name
         deadlineLabel.text = Utility.dateString(from: task.deadline)
         pomodoroDurationLabel.text = Utility.durationString(for: task.pomodoroDuration)
         ColorLabel.backgroundColor = task.idColor
@@ -56,7 +56,7 @@ class TaskViewController: UIViewController {
         if let task = task {
             load(task)
         } else {
-            task = Task(name: "", deadline: nil, pomodoroDuration: nil, project: defaultProject)
+            task = Task(name: "", deadline: nil, pomodoroDuration: nil, project: defaultProject ?? model.getProjects()[0])
             load(task!)
         }
         updateSaveButtonState()
@@ -176,7 +176,7 @@ extension TaskViewController : UIPickerViewDelegate, UIPickerViewDataSource {
                 return "\((row - 1) * 5) min"
             }
         } else if (pickerView == projectPicker) {
-            return model.getProjects()[row]
+            return model.getProjects()[row].name
         }
         fatalError("Unkown UIPickerView")
     }
@@ -194,7 +194,7 @@ extension TaskViewController : UIPickerViewDelegate, UIPickerViewDataSource {
             }
         } else if (picker == projectPicker) {
             projectPickerLabel.text = pickerView(picker, titleForRow: row, forComponent: 0)
-            task?.project = projectPickerLabel.text!
+            task?.project = model.getProject(name: projectPickerLabel.text!)!
         }
     }
 }
