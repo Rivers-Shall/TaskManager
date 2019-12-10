@@ -12,6 +12,7 @@ struct Project {
     var id : Int
     var name : String
     var defaultPomodoroDuration : TimeInterval?
+    var defaultDeadline : Date
     
     static var validID = 0
     static func getID() -> Int {
@@ -20,9 +21,10 @@ struct Project {
         return ID
     }
     
-    init(name : String, defaultPomodoroDuration : TimeInterval?) {
+    init(name : String, defaultPomodoroDuration : TimeInterval?, defaultDeadline : Date) {
         self.name = name
         self.defaultPomodoroDuration = defaultPomodoroDuration
+        self.defaultDeadline = defaultDeadline
         self.id = Project.getID()
     }
 }

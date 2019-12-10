@@ -70,7 +70,7 @@
                                 <connections>
                                     <outlet property="taskDescriptionLabel" destination="Aqb-5w-Kcl" id="ic0-eu-Oyr"/>
                                     <outlet property="taskNameLabel" destination="gwh-5k-3Hi" id="CcH-YE-gsM"/>
-                                    <segue destination="BYZ-38-t0r" kind="show" identifier="ShowDetail" id="gl0-yy-JEX"/>
+                                    <segue destination="BYZ-38-t0r" kind="show" identifier="ShowTaskDetail" id="gl0-yy-JEX"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ProjectTableViewCell" rowHeight="84" id="hPB-jH-apT" customClass="ProjectTableViewCell" customModule="TaskManager" customModuleProvider="target">
@@ -120,6 +120,7 @@
                                 <connections>
                                     <outlet property="projectExpandButton" destination="xMS-7l-Kfs" id="BTW-Gk-WUG"/>
                                     <outlet property="projectNameLabel" destination="KgJ-RD-s79" id="Y6t-R2-tfc"/>
+                                    <segue destination="A7L-KO-W8E" kind="show" identifier="ShowProjectDetail" id="vqw-mL-wYV"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -131,7 +132,7 @@
                     <navigationItem key="navigationItem" title="Task List" id="H4e-zL-1wn">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="SHy-8o-qHm">
                             <connections>
-                                <segue destination="rj7-ds-GA9" kind="show" identifier="AddTask" id="PDm-V2-vTh"/>
+                                <segue destination="ULr-sN-OHo" kind="show" identifier="AddNewProject" id="E9t-zJ-4cf"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -544,27 +545,186 @@
             </objects>
             <point key="canvasLocation" x="-827.536231884058" y="133.92857142857142"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="aip-eH-5dh">
+        <!--New Project-->
+        <scene sceneID="Qx5-zn-SWm">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="rj7-ds-GA9" sceneMemberID="viewController">
+                <viewController id="A7L-KO-W8E" customClass="ProjectViewController" customModule="TaskManager" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="yff-Fm-Pnk">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Project Name" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="lAV-Xl-ACG">
+                                <rect key="frame" x="20" y="88" width="374" height="34"/>
+                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="cy6-PX-r6I" userLabel="pomodoro stack">
+                                <rect key="frame" x="20" y="344.66666666666669" width="374.33333333333331" height="20.333333333333314"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="97" translatesAutoresizingMaskIntoConstraints="NO" id="cxP-V9-k4O">
+                                        <rect key="frame" x="0.0" y="0.0" width="374.33333333333331" height="20.333333333333332"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Default Pomodoro" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JGQ-9v-Y9N">
+                                                <rect key="frame" x="0.0" y="0.0" width="138.66666666666666" height="20.333333333333332"/>
+                                                <gestureRecognizers/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                                <connections>
+                                                    <outletCollection property="gestureRecognizers" destination="AhS-FZ-bbn" appends="YES" id="VrK-OO-Mg8"/>
+                                                </connections>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Pomodoro" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UGI-4q-zhB">
+                                                <rect key="frame" x="235.66666666666669" y="0.0" width="138.66666666666669" height="20.333333333333332"/>
+                                                <gestureRecognizers/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" red="0.3921568627" green="0.39607843139999999" blue="0.4039215686" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                                <connections>
+                                                    <outletCollection property="gestureRecognizers" destination="vEj-0G-whE" appends="YES" id="ToZ-mA-qbX"/>
+                                                </connections>
+                                            </label>
+                                        </subviews>
+                                        <gestureRecognizers/>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="Il1-pa-FEX" appends="YES" id="RYK-Uy-J0U"/>
+                                        </connections>
+                                    </stackView>
+                                    <pickerView hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uAs-XZ-wzd">
+                                        <rect key="frame" x="0.0" y="0.0" width="374.33333333333331" height="0.0"/>
+                                    </pickerView>
+                                </subviews>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="nae-YP-qpa" userLabel="deadline stack">
+                                <rect key="frame" x="20" y="380" width="374.33333333333331" height="20.333333333333314"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="olH-RN-moT">
+                                        <rect key="frame" x="0.0" y="0.0" width="374.33333333333331" height="20.333333333333332"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Default Deadline" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xrb-VY-OqB">
+                                                <rect key="frame" x="0.0" y="0.0" width="183.33333333333334" height="20.333333333333332"/>
+                                                <gestureRecognizers/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                                <connections>
+                                                    <outletCollection property="gestureRecognizers" destination="x9q-qF-1HE" appends="YES" id="qpL-PL-C8R"/>
+                                                </connections>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Deadline" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cnm-Cj-dbo">
+                                                <rect key="frame" x="191.33333333333337" y="0.0" width="183" height="20.333333333333332"/>
+                                                <gestureRecognizers/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.34509803919999998" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                                <connections>
+                                                    <outletCollection property="gestureRecognizers" destination="HYO-s8-1xK" appends="YES" id="HhG-sw-4rq"/>
+                                                </connections>
+                                            </label>
+                                        </subviews>
+                                        <gestureRecognizers/>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="aOQ-Fw-cTU" appends="YES" id="vuN-pE-bmj"/>
+                                        </connections>
+                                    </stackView>
+                                    <pickerView hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HTI-To-LzU">
+                                        <rect key="frame" x="0.0" y="0.0" width="374.33333333333331" height="0.0"/>
+                                    </pickerView>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="cy6-PX-r6I" firstAttribute="top" secondItem="2AX-DY-gbU" secondAttribute="bottom" multiplier="0.4" id="6da-lD-qoX"/>
+                            <constraint firstItem="lAV-Xl-ACG" firstAttribute="leading" secondItem="2AX-DY-gbU" secondAttribute="leading" constant="20" id="HSt-AF-BH1"/>
+                            <constraint firstItem="nae-YP-qpa" firstAttribute="top" secondItem="cy6-PX-r6I" secondAttribute="bottom" constant="15" id="M5Y-5j-SxG"/>
+                            <constraint firstItem="2AX-DY-gbU" firstAttribute="trailing" secondItem="lAV-Xl-ACG" secondAttribute="trailing" constant="20" id="QLS-GQ-UmE"/>
+                            <constraint firstItem="nae-YP-qpa" firstAttribute="leading" secondItem="cy6-PX-r6I" secondAttribute="leading" id="Zkk-Ri-kOm"/>
+                            <constraint firstItem="nae-YP-qpa" firstAttribute="width" secondItem="cy6-PX-r6I" secondAttribute="width" id="d1G-L5-RqT"/>
+                            <constraint firstItem="cy6-PX-r6I" firstAttribute="leading" secondItem="2AX-DY-gbU" secondAttribute="leading" constant="20" id="lpM-CK-FnA"/>
+                            <constraint firstItem="lAV-Xl-ACG" firstAttribute="top" secondItem="2AX-DY-gbU" secondAttribute="top" id="n4q-VP-pAr"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="2AX-DY-gbU"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="New Project" id="KvX-qG-Z2J">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="YF5-vc-e5F">
+                            <connections>
+                                <action selector="cancelAddNewProject:" destination="A7L-KO-W8E" id="NKz-PR-hpe"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="kbY-Dd-QM7">
+                            <connections>
+                                <segue destination="Wzz-LT-Lm4" kind="unwind" unwindAction="fromProjectViewToTaskList:" id="CnU-IJ-MbG"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="deadlineLabel" destination="Cnm-Cj-dbo" id="v6g-Av-za8"/>
+                        <outlet property="deadlinePicker" destination="HTI-To-LzU" id="BaW-Lp-DzS"/>
+                        <outlet property="pomodoroDurationLabel" destination="UGI-4q-zhB" id="Lrz-XR-i7B"/>
+                        <outlet property="pomodoroDurationPicker" destination="uAs-XZ-wzd" id="oNE-zb-Vkd"/>
+                        <outlet property="projectNameTextField" destination="lAV-Xl-ACG" id="GR0-Wp-Fxe"/>
+                        <outlet property="saveButton" destination="kbY-Dd-QM7" id="DYh-px-nbz"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vKB-V8-yEc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="Wzz-LT-Lm4" userLabel="Exit" sceneMemberID="exit"/>
+                <tapGestureRecognizer id="Il1-pa-FEX" userLabel="Pomodoro Tapped">
+                    <connections>
+                        <action selector="pomodoroTapped:" destination="A7L-KO-W8E" id="AUE-Cx-oY3"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="AhS-FZ-bbn" userLabel="Pomodoro Tapped">
+                    <connections>
+                        <action selector="pomodoroTapped:" destination="A7L-KO-W8E" id="a1f-he-Gcl"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="vEj-0G-whE" userLabel="Pomodoro Tapped">
+                    <connections>
+                        <action selector="pomodoroTapped:" destination="A7L-KO-W8E" id="Ig4-qg-7Ko"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="x9q-qF-1HE" userLabel="deadline Tapped">
+                    <connections>
+                        <action selector="deadlineTapped:" destination="A7L-KO-W8E" id="g1H-jr-Eza"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="HYO-s8-1xK" userLabel="deadline Tapped">
+                    <connections>
+                        <action selector="deadlineTapped:" destination="A7L-KO-W8E" id="4CP-q1-YSw"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="aOQ-Fw-cTU" userLabel="deadline Tapped">
+                    <connections>
+                        <action selector="deadlineTapped:" destination="A7L-KO-W8E" id="JPI-KG-frg"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="992.75362318840587" y="882.58928571428567"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="vf6-WT-mlb">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ULr-sN-OHo" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" id="8VO-ca-HZc"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="POh-Rd-bJc">
+                    <navigationItem key="navigationItem" id="N1Y-oa-FKd"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ctJ-rC-TYz">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="XHT-4Q-0fr"/>
+                        <segue destination="A7L-KO-W8E" kind="relationship" relationship="rootViewController" id="lrj-ky-yzW"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="gbg-sO-AgO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zhG-xe-2sV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1039" y="786"/>
+            <point key="canvasLocation" x="82.608695652173921" y="882.58928571428567"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="TQC-UO-uQ3"/>
+        <segue reference="vqw-mL-wYV"/>
+        <segue reference="gl0-yy-JEX"/>
     </inferredMetricsTieBreakers>
 </document>

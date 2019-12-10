@@ -21,6 +21,7 @@
 		734473A323938EC90081BDF4 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734473A223938EC90081BDF4 /* Task.swift */; };
 		734473A52393922E0081BDF4 /* TaskManagerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734473A42393922E0081BDF4 /* TaskManagerModel.swift */; };
 		738D6BB6239DCE5200ED6C2C /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738D6BB5239DCE5200ED6C2C /* Project.swift */; };
+		738D6BB8239DD47E00ED6C2C /* ProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738D6BB7239DD47E00ED6C2C /* ProjectViewController.swift */; };
 		73B4DA51239CD4E400FF34F9 /* ProjectTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B4DA50239CD4E400FF34F9 /* ProjectTableViewCell.swift */; };
 		73B4DA59239CF61E00FF34F9 /* ColorCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B4DA58239CF61E00FF34F9 /* ColorCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -54,6 +55,7 @@
 		734473A223938EC90081BDF4 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		734473A42393922E0081BDF4 /* TaskManagerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskManagerModel.swift; sourceTree = "<group>"; };
 		738D6BB5239DCE5200ED6C2C /* Project.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Project.swift; sourceTree = "<group>"; };
+		738D6BB7239DD47E00ED6C2C /* ProjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProjectViewController.swift; path = TaskManager/ProjectViewController.swift; sourceTree = SOURCE_ROOT; };
 		73B4DA50239CD4E400FF34F9 /* ProjectTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectTableViewCell.swift; sourceTree = "<group>"; };
 		73B4DA58239CF61E00FF34F9 /* ColorCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -100,6 +102,7 @@
 				73B4DA53239CD52800FF34F9 /* model */,
 				73B4DA52239CD50200FF34F9 /* TableView */,
 				73447380239362FC0081BDF4 /* TaskViewController.swift */,
+				738D6BB7239DD47E00ED6C2C /* ProjectViewController.swift */,
 				73B4DA58239CF61E00FF34F9 /* ColorCollectionViewCell.swift */,
 				732CC2AD23948F5B008426E5 /* TimerViewController.swift */,
 				732CC2A72393D6FA008426E5 /* Utility.swift */,
@@ -246,6 +249,7 @@
 				732CC2AA2393F9E8008426E5 /* TaskTableViewCell.swift in Sources */,
 				732CC2AE23948F5B008426E5 /* TimerViewController.swift in Sources */,
 				734473A323938EC90081BDF4 /* Task.swift in Sources */,
+				738D6BB8239DD47E00ED6C2C /* ProjectViewController.swift in Sources */,
 				732CC2AC2393FA6F008426E5 /* TaskTableViewController.swift in Sources */,
 				734473A52393922E0081BDF4 /* TaskManagerModel.swift in Sources */,
 				73B4DA51239CD4E400FF34F9 /* ProjectTableViewCell.swift in Sources */,

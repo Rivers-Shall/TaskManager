@@ -56,7 +56,11 @@ class TaskViewController: UIViewController {
         if let task = task {
             load(task)
         } else {
-            task = Task(name: "", deadline: nil, pomodoroDuration: nil, project: defaultProject ?? model.getProjects()[0])
+            defaultProject = defaultProject ?? model.getProjects()[0]
+            task = Task(name: "",
+                        deadline: defaultProject?.defaultDeadline,
+                        pomodoroDuration: defaultProject?.defaultPomodoroDuration,
+                        project: defaultProject!)
             load(task!)
         }
         updateSaveButtonState()

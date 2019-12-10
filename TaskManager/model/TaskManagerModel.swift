@@ -35,8 +35,8 @@ class TaskManagerModel {
 
     // MARK: Instance Member
     private var projects = [
-        Project(name: "Stand Alone", defaultPomodoroDuration: 25 * 60),
-        Project(name: "iOS APP", defaultPomodoroDuration: 25 * 60)
+        Project(name: "Stand Alone", defaultPomodoroDuration: 25 * 60, defaultDeadline: Date()),
+        Project(name: "iOS APP", defaultPomodoroDuration: 25 * 60, defaultDeadline: Date()) 
     ]
     
     private var tasks : [Task]
@@ -70,8 +70,18 @@ class TaskManagerModel {
         }
     }
     
-    func add(project : Project) {
-        projects.append(project)
+    // 返回值为true代表是新加入，false代表更新
+    func addOrUpdate(project : Project) -> Bool {
+        let projectIndex = projects.firstIndex { (projectInList) -> Bool in
+            projectInList.id == project.id
+        }
+        if let projectIndex = projectIndex { // update
+            projects[projectIndex] = project
+            return false
+        } else { // add
+            projects.append(project)
+            return true
+        }
     }
     
     func getTask(_ taskIndex : Int, in projectIndex : Int) -> Task {
@@ -86,6 +96,10 @@ class TaskManagerModel {
             return projects[projectIndex]
         }
         return nil
+    }
+    
+    func getProject(at index: Int) -> Project {
+        return projects[index]
     }
     
     init() {

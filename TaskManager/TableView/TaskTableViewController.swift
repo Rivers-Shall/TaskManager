@@ -14,26 +14,26 @@ class TaskTableViewController: UITableViewController {
     
     private let model = TaskManagerModel.getInstance()
     private var projectExpanded = [Int:Bool]()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
-
+        
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         for projectIndex in 0..<model.getProjects().count {
             projectExpanded[projectIndex] = false
         }
     }
-
+    
     // MARK: - Table view data source
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var sum = 0
         for (projectIndex, expanded) in projectExpanded {
@@ -44,14 +44,14 @@ class TaskTableViewController: UITableViewController {
         sum += model.getProjects().count
         return sum
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let (projectIndex, taskIndex) = projectAndTaskIndex(of: indexPath.row)
         if let taskIndex = taskIndex {
             let cell = tableView.dequeueReusableCell(withIdentifier: "TaskTableViewCell", for: indexPath) as? TaskTableViewCell
             let project = model.getProjects()[projectIndex]
             let task = model.getTasks(in: project)[taskIndex]
-
+            
             if let cell = cell {
                 cell.taskNameLabel.text = task.name
                 cell.backgroundColor = task.idColor
@@ -63,7 +63,7 @@ class TaskTableViewController: UITableViewController {
             } else {
                 fatalError("Unknown reusable cell")
             }
-
+            
             return cell!
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ProjectTableViewCell", for: indexPath) as? ProjectTableViewCell
@@ -93,18 +93,18 @@ class TaskTableViewController: UITableViewController {
         }
         return (projectIndex, nil)
     }
-
+    
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return CGFloat(80)
     }
     
     // MARK: - Navigation
-
+    
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier ?? "" {
-        case "ShowDetail":
+        case "ShowTaskDetail":
             guard let destTaskView = segue.destination as? TaskViewController else {
                 fatalError("showDetail not to taskView")
             }
@@ -116,6 +116,21 @@ class TaskTableViewController: UITableViewController {
             }
             let (projectIndex, taskIndex) = projectAndTaskIndex(of: indexPath.row)
             destTaskView.task = model.getTask(taskIndex!, in: projectIndex)
+        case "ShowProjectDetail":
+            guard let destProjectView = segue.destination as? ProjectViewController else {
+                fatalError("showDetail not to taskView")
+            }
+            guard let sender = sender as? ProjectTableViewCell else {
+                fatalError("sender not TaskTableCell")
+            }
+            guard let indexPath = tableView.indexPath(for: sender) else {
+                fatalError("sender cell not in Table")
+            }
+            let (projectIndex, taskIndex) = projectAndTaskIndex(of: indexPath.row)
+            if taskIndex != nil {
+                fatalError("Not a project cell")
+            }
+            destProjectView.project = model.getProject(at: projectIndex)
         case "StartTimer":
             guard let destTimerView = segue.destination as? TimerViewController else {
                 fatalError("StartTimer not to TimerView")
@@ -146,13 +161,14 @@ class TaskTableViewController: UITableViewController {
             }
             let (projectIndex, _) = projectAndTaskIndex(of: indexPath.row)
             destTaskView.defaultProject = model.getProjects()[projectIndex]
-        case "AddTask":
+        case "AddNewProject":
             break
         default:
             fatalError("Unknown segue")
         }
     }
     
+    // MARK: From add back to list
     @IBAction func unwindToTaskTable(_ sender : UIStoryboardSegue) {
         if let taskController = sender.source as? TaskViewController, let newTask = taskController.task {
             if let _ = tableView.indexPathForSelectedRow {
@@ -162,6 +178,18 @@ class TaskTableViewController: UITableViewController {
                 model.addOrUpdate(task: newTask, in: newTask.project)
                 tableView.reloadData()
             }
+        }
+    }
+    
+    @IBAction func fromProjectViewToTaskList(_ sender : UIStoryboardSegue) {
+        if let projectController = sender.source as? ProjectViewController, let newProject = projectController.project {
+            let add = model.addOrUpdate(project: newProject)
+            if add {
+                projectExpanded[projectExpanded.count] = false
+            }
+            tableView.reloadData()
+        } else {
+            fatalError("Error from ProjectView to TaskTableView")
         }
     }
     
@@ -183,13 +211,15 @@ class TaskTableViewController: UITableViewController {
             // 加载或者删除任务格子
             let tasksCount = model.getTasks(in: model.getProjects()[projectIndex]).count
             var indexPaths = [IndexPath]()
-            for index in indexPath.row + 1...indexPath.row + tasksCount {
-                indexPaths += [IndexPath(row: index, section: 0)]
-            }
-            if projectExpanded[projectIndex]! {
-                tableView.insertRows(at: indexPaths, with: .automatic)
-            } else {
-                tableView.deleteRows(at: indexPaths, with: .automatic)
+            if tasksCount > 0 {
+                for index in indexPath.row + 1...indexPath.row + tasksCount {
+                    indexPaths += [IndexPath(row: index, section: 0)]
+                }
+                if projectExpanded[projectIndex]! {
+                    tableView.insertRows(at: indexPaths, with: .automatic)
+                } else {
+                    tableView.deleteRows(at: indexPaths, with: .automatic)
+                }
             }
         }
     }
