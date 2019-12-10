@@ -17,9 +17,14 @@ class Utility {
     
     static func dateString(from date : Date?) -> String {
         if let date = date {
-            let today = dateComponents(from: Date())
             let dc = dateComponents(from: date)
+            let today = dateComponents(from: Date())
             if today.year == dc.year {
+                if userCalendar.isDateInToday(date) {
+                    return "Today"
+                } else if userCalendar.isDateInTomorrow(date) {
+                    return "Tomorrow"
+                }
                 return "\(userCalendar.shortWeekdaySymbols[dc.weekday! - 1]), \(dc.day!) \(userCalendar.monthSymbols[dc.month! - 1])"
             } else {
                 return "\(userCalendar.shortWeekdaySymbols[dc.weekday! - 1]), \(dc.day!) \(userCalendar.monthSymbols[dc.month! - 1]) \(dc.year!)"
