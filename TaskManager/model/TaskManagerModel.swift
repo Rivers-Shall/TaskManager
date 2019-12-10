@@ -52,6 +52,13 @@ class TaskManagerModel {
         }
     }
     
+    func getTasks(in projectIndex : Int) -> [Task] {
+        let project = projects[projectIndex]
+        return tasks.filter { (task) -> Bool in
+            task.project.id == project.id
+        }
+    }
+    
     func addOrUpdate(task : Task, in project : Project) {
         let taskIndex = tasks.firstIndex { taskInList in
             taskInList.id == task.id
@@ -100,6 +107,20 @@ class TaskManagerModel {
     
     func getProject(at index: Int) -> Project {
         return projects[index]
+    }
+    
+    func delete(task taskIndex : Int, in projectIndex : Int) {
+        let toDelete = getTask(taskIndex, in: projectIndex)
+        tasks.removeAll { (taskInList) -> Bool in
+            taskInList.id == toDelete.id
+        }
+    }
+    
+    func delete(projectAt projectIndex : Int) {
+        let deletedProject = projects.remove(at: projectIndex)
+        tasks.removeAll { (task) -> Bool in
+            task.project.id == deletedProject.id
+        }
     }
     
     init() {

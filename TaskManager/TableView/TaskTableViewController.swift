@@ -13,7 +13,7 @@ class TaskTableViewController: UITableViewController {
     typealias Project = String
     
     private let model = TaskManagerModel.getInstance()
-    private var projectExpanded = [Int:Bool]()
+    private var projectExpanded = [Bool]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,9 +23,11 @@ class TaskTableViewController: UITableViewController {
         
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
-        for projectIndex in 0..<model.getProjects().count {
-            projectExpanded[projectIndex] = false
+        for _ in 0..<model.getProjects().count {
+            projectExpanded.append(false)
         }
+        
+        navigationItem.leftBarButtonItem = editButtonItem
     }
     
     // MARK: - Table view data source
@@ -36,7 +38,7 @@ class TaskTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var sum = 0
-        for (projectIndex, expanded) in projectExpanded {
+        for (projectIndex, expanded) in projectExpanded.enumerated() {
             if expanded {
                 sum += model.getTasks(in: model.getProjects()[projectIndex]).count
             }
@@ -69,7 +71,7 @@ class TaskTableViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ProjectTableViewCell", for: indexPath) as? ProjectTableViewCell
             let project = model.getProjects()[projectIndex]
             cell?.projectNameLabel.text = project.name
-            cell?.projectExpandButton.setTitle(projectExpanded[projectIndex]! ? "V" : "<", for: .normal)
+            cell?.projectExpandButton.setTitle(projectExpanded[projectIndex] ? "V" : "<", for: .normal)
             cell?.selectionStyle = .none
             return cell!
         }
@@ -79,7 +81,7 @@ class TaskTableViewController: UITableViewController {
         var projectIndex = 0
         var currentRow = 0
         while currentRow < row {
-            if projectExpanded[projectIndex]! {
+            if projectExpanded[projectIndex] {
                 if currentRow + model.getTasks(in: model.getProjects()[projectIndex]).count < row {
                     currentRow += model.getTasks(in: model.getProjects()[projectIndex]).count // for current task-cells
                     currentRow += 1 // for next project cell
@@ -97,6 +99,34 @@ class TaskTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return CGFloat(80)
+    }
+    
+    // MARK: Table Edit
+    // TODO: Delete, drag and drop
+    
+    // Delete
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let (projectIndex, taskIndex) = projectAndTaskIndex(of: indexPath.row)
+            if let taskIndex = taskIndex {
+                // delete a task
+                model.delete(task: taskIndex, in: projectIndex)
+                tableView.deleteRows(at: [indexPath], with: .automatic)
+            } else {
+                // delete a project
+                var indexPathsToDelete = [indexPath]
+                if projectExpanded[projectIndex] {
+                    // delete an expanded project
+                    let taskCount = model.getTasks(in: projectIndex).count
+                    for i in 1...taskCount {
+                        indexPathsToDelete += [IndexPath(row: indexPath.row + i, section: 0)]
+                    }
+                }
+                model.delete(projectAt: projectIndex)
+                projectExpanded.remove(at: projectIndex)
+                tableView.deleteRows(at: indexPathsToDelete, with: .automatic)
+            }
+        }
     }
     
     // MARK: - Navigation
@@ -204,10 +234,10 @@ class TaskTableViewController: UITableViewController {
         }
         let (projectIndex, taskIndex) = projectAndTaskIndex(of: indexPath.row)
         if taskIndex == nil {
-            projectExpanded[projectIndex] = !projectExpanded[projectIndex]!
+            projectExpanded[projectIndex] = !projectExpanded[projectIndex]
             
             let cell = tableView.cellForRow(at: indexPath) as? ProjectTableViewCell
-            cell?.projectExpandButton.setTitle(projectExpanded[projectIndex]! ? "V" : "<", for: .normal)
+            cell?.projectExpandButton.setTitle(projectExpanded[projectIndex] ? "V" : "<", for: .normal)
             // 加载或者删除任务格子
             let tasksCount = model.getTasks(in: model.getProjects()[projectIndex]).count
             var indexPaths = [IndexPath]()
@@ -215,7 +245,7 @@ class TaskTableViewController: UITableViewController {
                 for index in indexPath.row + 1...indexPath.row + tasksCount {
                     indexPaths += [IndexPath(row: index, section: 0)]
                 }
-                if projectExpanded[projectIndex]! {
+                if projectExpanded[projectIndex] {
                     tableView.insertRows(at: indexPaths, with: .automatic)
                 } else {
                     tableView.deleteRows(at: indexPaths, with: .automatic)
