@@ -10,8 +10,7 @@ import UIKit
 
 class TaskTableViewController: UITableViewController {
     
-    typealias Project = String
-    
+    @IBOutlet weak var EditButtom: UIBarButtonItem!
     private let model = TaskManagerModel.getInstance()
     private var projectExpanded = [Bool]()
     
@@ -26,9 +25,18 @@ class TaskTableViewController: UITableViewController {
         for _ in 0..<model.getProjects().count {
             projectExpanded.append(false)
         }
-        
-        navigationItem.leftBarButtonItem = editButtonItem
+        EditButtom.title = tableView.isEditing ? "Done" : "Edit"
     }
+    
+    // MARK: Edit Buttom
+    @IBAction func EditButtomTapped(_ sender: UIBarButtonItem) {
+        tableView.isEditing = !tableView.isEditing
+        sender.title = tableView.isEditing ? "Done" : "Edit"
+        if !tableView.isEditing {
+            tableView.reloadData()
+        }
+    }
+    
     
     // MARK: - Table view data source
     
@@ -101,10 +109,14 @@ class TaskTableViewController: UITableViewController {
         return CGFloat(80)
     }
     
-    // MARK: Table Edit
-    // TODO: Delete, drag and drop
+    // MARK: Table Edit (Delete, Move)
+    //TODO: Delete, drag and drop
     
     // Delete
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let (projectIndex, taskIndex) = projectAndTaskIndex(of: indexPath.row)
@@ -129,6 +141,53 @@ class TaskTableViewController: UITableViewController {
         }
     }
     
+    // move (drag and drop)
+    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        let (_, taskIndex) = projectAndTaskIndex(of: indexPath.row)
+        if projectExpanded.contains(true) && taskIndex == nil {
+            // 如果有项目是处在展开状态，就不可以移动项目格
+            return false
+        }
+        return true
+    }
+    
+    override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        let (srcProjectIndex, srcTaskIndex) = projectAndTaskIndex(of: sourceIndexPath.row)
+        var (destProjectIndex, destTaskIndex) = projectAndTaskIndex(of: destinationIndexPath.row)
+        
+        if let srcTaskIndex = srcTaskIndex {
+            // move a task cell
+            if destProjectIndex <= srcProjectIndex && destTaskIndex == nil {
+                // 其实是移动到了前一个项目的最后一个
+                if destProjectIndex > 0 {
+                    destProjectIndex = destProjectIndex - 1
+                    destTaskIndex = model.getTasks(in: destProjectIndex).count
+                } else {
+                    // 第一个项目的前面，这是一个非法位置，默认放到第一个项目的第一个
+                    destTaskIndex = 0
+                }
+            } else if destProjectIndex > srcProjectIndex {
+                if destTaskIndex == nil {
+                    destTaskIndex = 0
+                } else {
+                    destTaskIndex = destTaskIndex! + 1
+                }
+            }
+            if !projectExpanded[destProjectIndex] {
+                projectExpanded[destProjectIndex] = true
+            }
+            model.move(taskAt: srcTaskIndex, in: srcProjectIndex, intoNth: destProjectIndex, at: destTaskIndex!)
+        } else {
+            // 移动项目格
+            let toMove = projectExpanded.remove(at: srcProjectIndex)
+            projectExpanded.insert(toMove, at: destProjectIndex)
+            model.move(projectAt: srcProjectIndex, to: destProjectIndex)
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
+        tableView.reloadData()
+    }
     // MARK: - Navigation
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -215,7 +274,7 @@ class TaskTableViewController: UITableViewController {
         if let projectController = sender.source as? ProjectViewController, let newProject = projectController.project {
             let add = model.addOrUpdate(project: newProject)
             if add {
-                projectExpanded[projectExpanded.count] = false
+                projectExpanded.append(false)
             }
             tableView.reloadData()
         } else {

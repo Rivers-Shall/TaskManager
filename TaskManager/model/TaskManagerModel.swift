@@ -123,7 +123,44 @@ class TaskManagerModel {
         }
     }
     
+    func move(taskAt srcTaskIndex : Int, in srcProjectIndex : Int, intoNth destProjectIndex : Int, at destTaskIndex : Int) {
+        var srcTask = getTask(srcTaskIndex, in: srcProjectIndex)
+        let modelSrcTaskIndex = tasks.firstIndex { (taskInList) -> Bool in
+            taskInList.id == srcTask.id
+        }
+        tasks.remove(at: modelSrcTaskIndex!)
+        
+        srcTask.project = getProject(at: destProjectIndex)
+        
+        var modelDestTaskIndex = tasks.count
+        if destTaskIndex != getTasks(in: destProjectIndex).count {
+            let destTask = getTask(destTaskIndex, in: destProjectIndex)
+            modelDestTaskIndex = tasks.firstIndex { (taskInList) -> Bool in
+                taskInList.id == destTask.id
+            } ?? tasks.count
+        }
+        tasks.insert(srcTask, at: modelDestTaskIndex)
+    }
+    
+    func move(projectAt srcProjectIndex : Int, to destProjectIndex : Int) {
+        let projectToMove = projects.remove(at: srcProjectIndex)
+        projects.insert(projectToMove, at: destProjectIndex)
+    }
+    
     init() {
-        tasks = [Task(name: "task1", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]), Task(name: "task1", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),Task(name: "task1", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),Task(name: "task1", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),Task(name: "task1", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),Task(name: "task1", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),Task(name: "task1", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),Task(name: "task1", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),Task(name: "task1", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),Task(name: "task1", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),Task(name: "task1", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),Task(name: "task2", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[1])]
+        tasks = [
+            Task(name: "task1", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+            Task(name: "task2", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+            Task(name: "task3", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+            Task(name: "task4", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+            Task(name: "task5", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+            Task(name: "task6", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+            Task(name: "task7", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+            Task(name: "task8", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+            Task(name: "task9", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+            Task(name: "task10", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+            Task(name: "task11", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+            Task(name: "task12", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[1])
+        ]
     }
 }

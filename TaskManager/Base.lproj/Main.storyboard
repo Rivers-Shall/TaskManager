@@ -130,12 +130,20 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Task List" id="H4e-zL-1wn">
+                        <barButtonItem key="leftBarButtonItem" title="Item" style="plain" id="7TN-Xz-R8t">
+                            <connections>
+                                <action selector="EditButtomTapped:" destination="QeL-nQ-8Gv" id="TVU-ry-qDJ"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="SHy-8o-qHm">
                             <connections>
                                 <segue destination="ULr-sN-OHo" kind="show" identifier="AddNewProject" id="E9t-zJ-4cf"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="EditButtom" destination="7TN-Xz-R8t" id="jxg-cM-X4K"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dVI-83-JLU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
