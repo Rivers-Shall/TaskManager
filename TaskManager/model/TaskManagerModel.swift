@@ -42,6 +42,8 @@ class TaskManagerModel {
     private var tasks : [Task]
     
     // MARK: Instance Method
+    
+    // MARK: Projects and Tasks
     func getProjects() -> [Project] {
         return projects
     }
@@ -147,20 +149,45 @@ class TaskManagerModel {
         projects.insert(projectToMove, at: destProjectIndex)
     }
     
+    // MARK: Deadlines and Tasks
+    func getDeadlines() -> [Date] {
+        var dateDeadlines =
+            tasks.filter { (task) -> Bool in
+                task.deadline != nil
+            }.map { (task) -> Date in
+                task.deadline!
+            }
+        dateDeadlines = dateDeadlines.map({ (date) -> Date in
+            Utility.userCalendar.startOfDay(for: date)
+            }).sorted()
+        return Array(Set(dateDeadlines)).sorted()
+    }
+    
+    func getTasksDead(at deadline : Date) -> [Task] {
+        let deadline = Utility.userCalendar.startOfDay(for: deadline)
+        return tasks.filter { (task) -> Bool in
+            if let taskDeadline = task.deadline {
+                return Utility.userCalendar.startOfDay(for: taskDeadline) == deadline
+            } else {
+                return false
+            }
+        }
+    }
+    
     init() {
         tasks = [
-            Task(name: "task1", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
-            Task(name: "task2", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
-            Task(name: "task3", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
-            Task(name: "task4", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
-            Task(name: "task5", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
-            Task(name: "task6", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
-            Task(name: "task7", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
-            Task(name: "task8", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
-            Task(name: "task9", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
-            Task(name: "task10", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
-            Task(name: "task11", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
-            Task(name: "task12", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[1])
+            Task(name: "列表右上角+新增项目", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+            Task(name: "列表上方<->切换视图", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+            Task(name: "列表左上角进入编辑模式", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+            Task(name: "编辑模式可以删除项目或任务", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+            Task(name: "编辑模式可以重排项目和任务", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+            Task(name: "编辑模式快速在项目间移动任务", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+            Task(name: "Start按钮开启番茄钟", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+            Task(name: "task8", deadline: Date().addingTimeInterval(24 * 3600), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+            Task(name: "task9", deadline: Date().addingTimeInterval(24 * 3600), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+            Task(name: "task10", deadline: Date().addingTimeInterval(24 * 3600), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+            Task(name: "task11", deadline: Date().addingTimeInterval(24 * 3600), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+            Task(name: "task12", deadline: Date().addingTimeInterval(24 * 3600), pomodoroDuration: TimeInterval(5 * 60), project: projects[1])
         ]
     }
 }

@@ -10,9 +10,14 @@ import UIKit
 
 class TaskTableViewController: UITableViewController {
     
+    // MARK: Properties
     @IBOutlet weak var EditButtom: UIBarButtonItem!
+    @IBOutlet weak var projectDeadlineViewButton: UIBarButtonItem!
+    @IBOutlet weak var addProjectButtom: UIBarButtonItem!
+    
     private let model = TaskManagerModel.getInstance()
     private var projectExpanded = [Bool]()
+    private var projectView = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +31,7 @@ class TaskTableViewController: UITableViewController {
             projectExpanded.append(false)
         }
         EditButtom.title = tableView.isEditing ? "Done" : "Edit"
+        projectDeadlineViewButton.title = "<->"
     }
     
     // MARK: Edit Buttom
@@ -37,50 +43,80 @@ class TaskTableViewController: UITableViewController {
         }
     }
     
+    // MARK: Project and Deadline View Exchange Buttom
+    @IBAction func projectDeadlineButtomTapped(_ sender: Any) {
+        projectView = !projectView
+        // 在deadline的视图下
+        // 禁止使用Edit和+按钮
+        EditButtom.isEnabled = !EditButtom.isEnabled
+        addProjectButtom.isEnabled = !addProjectButtom.isEnabled
+        
+        tableView.reloadData()
+    }
+    
     
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        if projectView {
+            return 1
+        } else {
+            return model.getDeadlines().count
+        }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        var sum = 0
-        for (projectIndex, expanded) in projectExpanded.enumerated() {
-            if expanded {
-                sum += model.getTasks(in: model.getProjects()[projectIndex]).count
+        if projectView {
+            var sum = 0
+            for (projectIndex, expanded) in projectExpanded.enumerated() {
+                if expanded {
+                    sum += model.getTasks(in: model.getProjects()[projectIndex]).count
+                }
             }
+            sum += model.getProjects().count
+            return sum
+        } else {
+            return model.getTasksDead(at: model.getDeadlines()[section]).count
         }
-        sum += model.getProjects().count
-        return sum
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let (projectIndex, taskIndex) = projectAndTaskIndex(of: indexPath.row)
-        if let taskIndex = taskIndex {
+        if projectView {
+            let (projectIndex, taskIndex) = projectAndTaskIndex(of: indexPath.row)
+            if let taskIndex = taskIndex {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "TaskTableViewCell", for: indexPath) as? TaskTableViewCell
+                let project = model.getProjects()[projectIndex]
+                let task = model.getTasks(in: project)[taskIndex]
+                
+                if let cell = cell {
+                    cell.taskNameLabel.text = task.name
+                    cell.backgroundColor = task.idColor
+                    cell.taskDescriptionLabel.text = task.description()
+                } else {
+                    fatalError("Unknown reusable cell")
+                }
+                
+                return cell!
+            } else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "ProjectTableViewCell", for: indexPath) as? ProjectTableViewCell
+                let project = model.getProjects()[projectIndex]
+                cell?.projectNameLabel.text = project.name
+                cell?.projectExpandButton.setTitle(projectExpanded[projectIndex] ? "V" : "<", for: .normal)
+                cell?.selectionStyle = .none
+                return cell!
+            }
+        } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "TaskTableViewCell", for: indexPath) as? TaskTableViewCell
-            let project = model.getProjects()[projectIndex]
-            let task = model.getTasks(in: project)[taskIndex]
-            
+            let task = model.getTasksDead(at: model.getDeadlines()[indexPath.section])[indexPath.row]
             if let cell = cell {
                 cell.taskNameLabel.text = task.name
                 cell.backgroundColor = task.idColor
-                if let duration = task.pomodoroDuration {
-                    cell.taskDescriptionLabel.text = Utility.durationString(for: duration)
-                } else {
-                    cell.taskDescriptionLabel.text = "Already devoted \(task.timeUsed / 3600) h"
-                }
+                cell.taskDescriptionLabel.text = task.description()
+                cell.isUserInteractionEnabled = true
             } else {
                 fatalError("Unknown reusable cell")
             }
             
-            return cell!
-        } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "ProjectTableViewCell", for: indexPath) as? ProjectTableViewCell
-            let project = model.getProjects()[projectIndex]
-            cell?.projectNameLabel.text = project.name
-            cell?.projectExpandButton.setTitle(projectExpanded[projectIndex] ? "V" : "<", for: .normal)
-            cell?.selectionStyle = .none
             return cell!
         }
     }
@@ -107,6 +143,15 @@ class TaskTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return CGFloat(80)
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if !projectView {
+            let deadline = model.getDeadlines()[section]
+            return Utility.dateString(from: deadline)
+        } else {
+            return ""
+        }
     }
     
     // MARK: Table Edit (Delete, Move)

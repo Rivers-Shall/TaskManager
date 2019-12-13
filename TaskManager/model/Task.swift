@@ -29,6 +29,15 @@ struct Task {
     
     let userCalendar = Calendar.current
     
+    // 返回列表任务格子中的描述文字
+    func description() -> String {
+        if let duration = self.pomodoroDuration {
+            return Utility.durationString(for: duration)
+        } else {
+            return "Already devoted \(self.timeUsed / 3600) h"
+        }
+    }
+    
     init(name : String, deadline : Date?, pomodoroDuration : TimeInterval?, project : Project) {
         self.name = name
         self.deadline = deadline

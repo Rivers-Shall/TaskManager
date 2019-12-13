@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="GAc-TH-8fD">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="GAc-TH-8fD">
     <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -135,14 +135,31 @@
                                 <action selector="EditButtomTapped:" destination="QeL-nQ-8Gv" id="TVU-ry-qDJ"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="SHy-8o-qHm">
-                            <connections>
-                                <segue destination="ULr-sN-OHo" kind="show" identifier="AddNewProject" id="E9t-zJ-4cf"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="add" id="SHy-8o-qHm">
+                                <connections>
+                                    <segue destination="ULr-sN-OHo" kind="show" identifier="AddNewProject" id="E9t-zJ-4cf"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="&lt;-&gt;" id="Zq9-5W-EWE">
+                                <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="c9d-Xa-IIU">
+                                    <rect key="frame" x="261.33333333333331" y="7" width="92" height="30"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <state key="normal" title="&lt;-&gt;"/>
+                                    <connections>
+                                        <action selector="projectDeadlineButtomTapped:" destination="QeL-nQ-8Gv" eventType="touchUpInside" id="jt7-D1-jZD"/>
+                                    </connections>
+                                </button>
+                                <connections>
+                                    <action selector="projectDeadlineButtomTapped:" destination="QeL-nQ-8Gv" id="C2O-u8-MTf"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="EditButtom" destination="7TN-Xz-R8t" id="jxg-cM-X4K"/>
+                        <outlet property="addProjectButtom" destination="SHy-8o-qHm" id="6NE-ow-f86"/>
+                        <outlet property="projectDeadlineViewButton" destination="Zq9-5W-EWE" id="zx1-gK-Sng"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dVI-83-JLU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -733,6 +750,6 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="vqw-mL-wYV"/>
-        <segue reference="gl0-yy-JEX"/>
+        <segue reference="TQC-UO-uQ3"/>
     </inferredMetricsTieBreakers>
 </document>
