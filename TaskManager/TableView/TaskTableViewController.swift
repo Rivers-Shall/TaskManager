@@ -279,6 +279,7 @@ class TaskTableViewController: UITableViewController {
                 fatalError("sender cell ont in table")
             }
             let (projectIndex, taskIndex) = projectAndTaskIndex(of: indexPath.row)
+            destTimerView.task = model.getTask(taskIndex!, in: projectIndex)
             destTimerView.pomodoroTime = model.getTask(taskIndex!, in: projectIndex).pomodoroDuration ?? 0
         case "AddNewTask":
             guard let destTaskView = segue.destination as? TaskViewController else {
@@ -302,7 +303,7 @@ class TaskTableViewController: UITableViewController {
         }
     }
     
-    // MARK: From add back to list
+    // MARK: Other view unwind to list
     @IBAction func unwindToTaskTable(_ sender : UIStoryboardSegue) {
         if let taskController = sender.source as? TaskViewController, let newTask = taskController.task {
             if let _ = tableView.indexPathForSelectedRow {
@@ -312,6 +313,10 @@ class TaskTableViewController: UITableViewController {
                 model.addOrUpdate(task: newTask, in: newTask.project)
                 tableView.reloadData()
             }
+        } else if let timerController = sender.source as? TimerViewController, let newTask = timerController.task {
+            model.addOrUpdate(task : newTask, in: newTask.project)
+        } else {
+            fatalError()
         }
     }
     

@@ -130,7 +130,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Task List" id="H4e-zL-1wn">
-                        <barButtonItem key="leftBarButtonItem" title="Item" style="plain" id="7TN-Xz-R8t">
+                        <barButtonItem key="leftBarButtonItem" title="Item" id="7TN-Xz-R8t">
                             <connections>
                                 <action selector="EditButtomTapped:" destination="QeL-nQ-8Gv" id="TVU-ry-qDJ"/>
                             </connections>
@@ -211,7 +211,7 @@
                     <navigationItem key="navigationItem" id="toP-Ff-Nc9"/>
                     <connections>
                         <outlet property="timerLabel" destination="DQM-bI-Zkt" id="vdW-lh-G74"/>
-                        <segue destination="sfq-GB-eQG" kind="unwind" identifier="unwindToTaskTable" unwindAction="unwindToTaskTable:" id="2kb-fj-ikR"/>
+                        <segue destination="sfq-GB-eQG" kind="unwind" identifier="unwindToTaskTable" unwindAction="unwindToTaskTable:" id="wEt-et-Ter"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wL6-hM-vsK" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -486,10 +486,12 @@
                         <outlet property="deadlinePicker" destination="Rij-Ag-t0R" id="qfd-hK-WL8"/>
                         <outlet property="pomodoroDurationLabel" destination="Sg2-tn-IBw" id="FAG-Dg-Bb3"/>
                         <outlet property="pomodoroDurationPicker" destination="E0A-tC-jPh" id="2hS-gN-OWm"/>
+                        <outlet property="pomodoroUsedLabel" destination="VyM-MM-HqI" id="8zF-Qy-xm1"/>
                         <outlet property="projectPicker" destination="z6G-NZ-vjC" id="FfB-Se-wmo"/>
                         <outlet property="projectPickerLabel" destination="Y2x-hG-y5l" id="VIu-Th-YWz"/>
                         <outlet property="saveButton" destination="2e2-tB-soc" id="fo8-mu-eQD"/>
                         <outlet property="taskNameTextField" destination="afZ-91-mvt" id="OyQ-CR-qCI"/>
+                        <outlet property="timeUsedLabel" destination="BNC-Fu-7Xs" id="6kw-Le-jA8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

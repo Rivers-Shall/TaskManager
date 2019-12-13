@@ -12,7 +12,9 @@ class TimerViewController: UIViewController {
 
     // MARK: Properties
     @IBOutlet weak var timerLabel: UILabel!
+    var task : Task?
     var time : Int = 0
+    var duration : Int = 0
     var timer : Timer?
     var pomodoroTime : TimeInterval {
         get {
@@ -28,13 +30,15 @@ class TimerViewController: UIViewController {
         super.viewDidLoad()
         let timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (Timer) in
             if !self.countUp {
-                self.time -= 1;
+                self.time -= 1
             } else {
-                self.time += 1;
+                self.time += 1
             }
+            self.duration += 1
             self.updateTimerLabel(Timer)
         }
         self.timer = timer
+        timerLabel.text = "\(String(format: "%02d", time / 60)):\(String(format: "%02d", time % 60))"
         //timer.fire()
         
         // Do any additional setup after loading the view.
@@ -48,8 +52,10 @@ class TimerViewController: UIViewController {
     }
     
     func quit(_ timer : Timer) {
-        timer.invalidate()  
-        self.dismiss(animated: true, completion: nil)
+        timer.invalidate()
+        task?.pomodoroUsed += 1
+        task?.timeUsed += TimeInterval(duration)
+        self.performSegue(withIdentifier: "unwindToTaskTable", sender: self)
     }
 
     @IBAction func quitButtonTapped(_ sender: UIButton) {

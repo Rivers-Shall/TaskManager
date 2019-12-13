@@ -14,6 +14,10 @@ class TaskViewController: UIViewController {
     var task : Task?
     var defaultProject : Project?
     var model : TaskManagerModel = TaskManagerModel.getInstance()
+    
+    @IBOutlet weak var timeUsedLabel: UILabel!
+    @IBOutlet weak var pomodoroUsedLabel: UILabel!
+    
     @IBOutlet weak var taskNameTextField: UITextField!
     @IBOutlet weak var saveButton: UIBarButtonItem!
     
@@ -47,6 +51,8 @@ class TaskViewController: UIViewController {
         deadlineLabel.text = Utility.dateString(from: task.deadline)
         pomodoroDurationLabel.text = Utility.durationString(for: task.pomodoroDuration)
         ColorLabel.backgroundColor = task.idColor
+        pomodoroUsedLabel.text = String(task.pomodoroUsed)
+        timeUsedLabel.text = String(format: "%.1f", task.timeUsed / 3600)
     }
     
     override func viewDidLoad() {
