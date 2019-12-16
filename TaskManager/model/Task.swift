@@ -8,9 +8,10 @@
 
 import Foundation
 import UIKit
+import os.log
 
-struct Task {
-    
+class Task : NSObject, NSCoding {
+
     static var validID = 0
     static func getID() -> Int {
         let ID = validID
@@ -47,4 +48,66 @@ struct Task {
         self.pomodoroUsed = 0
         self.id = Task.getID()
     }
+    
+    init(name : String, deadline : Date?, pomodoroDuration : TimeInterval?, project : Project, timeUsed : TimeInterval,
+         pomodoroUsed : Int, id : Int, idColor : UIColor) {
+        self.name = name
+        self.deadline = deadline
+        self.pomodoroDuration = pomodoroDuration
+        self.project = project
+        self.timeUsed = timeUsed
+        self.pomodoroUsed = pomodoroUsed
+        self.id = id
+        self.idColor = idColor
+    }
+    
+    // MARK: NSCoding
+    func encode(with coder: NSCoder) {
+        coder.encode(name, forKey: TaskPropertyKey.name)
+        coder.encode(deadline, forKey: TaskPropertyKey.deadline)
+        coder.encode(pomodoroDuration, forKey: TaskPropertyKey.pomodoroDuration)
+        coder.encode(timeUsed, forKey: TaskPropertyKey.timeUsed)
+        coder.encode(pomodoroUsed, forKey: TaskPropertyKey.pomodoroUsed)
+        coder.encode(project, forKey: TaskPropertyKey.project)
+        coder.encode(id, forKey: TaskPropertyKey.id)
+        coder.encode(idColor, forKey: TaskPropertyKey.idColor)
+    }
+    
+    required convenience init?(coder: NSCoder) {
+        // everything is required
+        guard let name = coder.decodeObject(forKey: TaskPropertyKey.name) as? String else {
+            os_log("cannot decode name for task")
+            return nil
+        }
+        
+        guard let deadline = coder.decodeObject(forKey: TaskPropertyKey.deadline) as? Date? else {
+            os_log("cannot decode deadline for task")
+            return nil
+        }
+        
+        guard let pomodoroDuration = coder.decodeObject(forKey: TaskPropertyKey.pomodoroDuration) as? TimeInterval? else {
+            os_log("cannot decode pomodoroDuration for task")
+            return nil
+        }
+        
+        let timeUsed = coder.decodeDouble(forKey: TaskPropertyKey.timeUsed)
+        
+        let pomodoroUsed = coder.decodeInteger(forKey: TaskPropertyKey.pomodoroUsed)
+        
+        guard let project = coder.decodeObject(forKey: TaskPropertyKey.project) as? Project else {
+            os_log("cannot decode project for task")
+            return nil
+        }
+        
+        let id = coder.decodeInteger(forKey: TaskPropertyKey.id)
+        
+        guard let idColor = coder.decodeObject(forKey: TaskPropertyKey.idColor) as? UIColor else {
+            os_log("cannot decode idColor for task")
+            return nil
+        }
+        
+        self.init(name : name, deadline : deadline, pomodoroDuration : pomodoroDuration, project : project, timeUsed : timeUsed,
+                  pomodoroUsed : pomodoroUsed, id : id, idColor : idColor)
+    }
+    
 }

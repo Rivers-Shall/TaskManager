@@ -27,6 +27,9 @@ class TaskManagerModel {
         UIColor(red: CGFloat(0.5), green: CGFloat(0.2), blue: CGFloat(0.7), alpha: CGFloat(0.9)),
         UIColor(red: CGFloat(0.9), green: CGFloat(0.1), blue: CGFloat(0.3), alpha: CGFloat(0.9)),
     ]
+    static let DocumentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
+    static let TaskArchiveURL = DocumentsDirectory.appendingPathComponent("tasks")
+    static let ProjectArchiveURL = DocumentsDirectory.appendingPathComponent("projects")
     
     // MARK: Static Method
     static func getInstance() -> TaskManagerModel {
@@ -34,10 +37,7 @@ class TaskManagerModel {
     }
 
     // MARK: Instance Member
-    private var projects = [
-        Project(name: "Stand Alone", defaultPomodoroDuration: 25 * 60, defaultDeadline: Date()),
-        Project(name: "iOS APP", defaultPomodoroDuration: 25 * 60, defaultDeadline: Date()) 
-    ]
+    private var projects : [Project]
     
     private var tasks : [Task]
     
@@ -77,6 +77,7 @@ class TaskManagerModel {
         } else { // add
             tasks.append(task)
         }
+        saveAll()
     }
     
     // 返回值为true代表是新加入，false代表更新
@@ -86,9 +87,11 @@ class TaskManagerModel {
         }
         if let projectIndex = projectIndex { // update
             projects[projectIndex] = project
+            saveAll()
             return false
         } else { // add
             projects.append(project)
+            saveAll()
             return true
         }
     }
@@ -116,6 +119,7 @@ class TaskManagerModel {
         tasks.removeAll { (taskInList) -> Bool in
             taskInList.id == toDelete.id
         }
+        saveAll()
     }
     
     func delete(projectAt projectIndex : Int) {
@@ -123,10 +127,11 @@ class TaskManagerModel {
         tasks.removeAll { (task) -> Bool in
             task.project.id == deletedProject.id
         }
+        saveAll()
     }
     
     func move(taskAt srcTaskIndex : Int, in srcProjectIndex : Int, intoNth destProjectIndex : Int, at destTaskIndex : Int) {
-        var srcTask = getTask(srcTaskIndex, in: srcProjectIndex)
+        let srcTask = getTask(srcTaskIndex, in: srcProjectIndex)
         let modelSrcTaskIndex = tasks.firstIndex { (taskInList) -> Bool in
             taskInList.id == srcTask.id
         }
@@ -142,11 +147,13 @@ class TaskManagerModel {
             } ?? tasks.count
         }
         tasks.insert(srcTask, at: modelDestTaskIndex)
+        saveAll()
     }
     
     func move(projectAt srcProjectIndex : Int, to destProjectIndex : Int) {
         let projectToMove = projects.remove(at: srcProjectIndex)
         projects.insert(projectToMove, at: destProjectIndex)
+        saveAll()
     }
     
     // MARK: Deadlines and Tasks
@@ -175,19 +182,78 @@ class TaskManagerModel {
     }
     
     init() {
-        tasks = [
-            Task(name: "列表右上角+新增项目", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
-            Task(name: "列表上方<->切换视图", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
-            Task(name: "列表左上角进入编辑模式", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
-            Task(name: "编辑模式可以删除项目或任务", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
-            Task(name: "编辑模式可以重排项目和任务", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
-            Task(name: "编辑模式快速在项目间移动任务", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
-            Task(name: "Start按钮开启番茄钟", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
-            Task(name: "task8", deadline: Date().addingTimeInterval(24 * 3600), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
-            Task(name: "task9", deadline: Date().addingTimeInterval(24 * 3600), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
-            Task(name: "task10", deadline: Date().addingTimeInterval(24 * 3600), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
-            Task(name: "task11", deadline: Date().addingTimeInterval(24 * 3600), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
-            Task(name: "task12", deadline: Date().addingTimeInterval(24 * 3600), pomodoroDuration: TimeInterval(5 * 60), project: projects[1])
-        ]
+        projects = [Project]()
+        tasks = [Task]()
+        
+        projects += loadProjects()
+        if projects.count == 0 {
+            projects += [
+                Project(name: "Stand Alone", defaultPomodoroDuration: 25 * 60, defaultDeadline: Date()),
+                Project(name: "iOS APP", defaultPomodoroDuration: 25 * 60, defaultDeadline: Date())
+            ]
+        }
+        
+        tasks += loadTasks()
+        if tasks.count == 0 {
+            tasks += [
+                Task(name: "列表右上角+新增项目", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+                Task(name: "列表上方<->切换视图", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+                Task(name: "列表左上角进入编辑模式", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+                Task(name: "编辑模式可以删除项目或任务", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+                Task(name: "编辑模式可以重排项目和任务", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+                Task(name: "编辑模式快速在项目间移动任务", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+                Task(name: "Start按钮开启番茄钟", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+                Task(name: "task8", deadline: Date().addingTimeInterval(24 * 3600), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+                Task(name: "task9", deadline: Date().addingTimeInterval(24 * 3600), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+                Task(name: "task10", deadline: Date().addingTimeInterval(24 * 3600), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+                Task(name: "task11", deadline: Date().addingTimeInterval(24 * 3600), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
+                Task(name: "task12", deadline: Date().addingTimeInterval(24 * 3600), pomodoroDuration: TimeInterval(5 * 60), project: projects[1])
+            ]
+        }
+    }
+    
+    private func saveTasks() {
+        let tasksData = try! NSKeyedArchiver.archivedData(withRootObject: tasks, requiringSecureCoding: false)
+        do {
+            try tasksData.write(to: TaskManagerModel.TaskArchiveURL)
+        } catch {
+            print("Cannot write to save file: " + error.localizedDescription)
+        }
+    }
+    
+    private func saveProjects() {
+        let tasksData = try! NSKeyedArchiver.archivedData(withRootObject: projects, requiringSecureCoding: false)
+        do {
+            try tasksData.write(to: TaskManagerModel.ProjectArchiveURL)
+        } catch {
+            print("Cannot write to save file: " + error.localizedDescription)
+        }
+    }
+    
+    private func saveAll() {
+        saveTasks()
+        saveProjects()
+    }
+    
+    private func loadTasks() -> [Task] {
+        guard let taskData = try? Data(contentsOf: TaskManagerModel.TaskArchiveURL) else {
+            print("Cannot load tasks")
+            return [Task]()
+        }
+        
+        return try! NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(taskData)
+            as? [Task]
+            ?? [Task]()
+    }
+    
+    private func loadProjects() -> [Project] {
+        guard let projectData = try? Data(contentsOf: TaskManagerModel.ProjectArchiveURL) else {
+            print("Cannot load projects")
+            return [Project]()
+        }
+        
+        return try! NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(projectData)
+            as? [Project]
+            ?? [Project]()
     }
 }

@@ -20,6 +20,8 @@
 		73447394239362FE0081BDF4 /* TaskManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73447393239362FE0081BDF4 /* TaskManagerTests.swift */; };
 		734473A323938EC90081BDF4 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734473A223938EC90081BDF4 /* Task.swift */; };
 		734473A52393922E0081BDF4 /* TaskManagerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 734473A42393922E0081BDF4 /* TaskManagerModel.swift */; };
+		736E994023A5E3FC00514807 /* ProjectPropertyKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736E993F23A5E3FC00514807 /* ProjectPropertyKey.swift */; };
+		736E994223A5E70100514807 /* TaskPropertyKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736E994123A5E70100514807 /* TaskPropertyKey.swift */; };
 		738D6BB6239DCE5200ED6C2C /* Project.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738D6BB5239DCE5200ED6C2C /* Project.swift */; };
 		738D6BB8239DD47E00ED6C2C /* ProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 738D6BB7239DD47E00ED6C2C /* ProjectViewController.swift */; };
 		73B4DA51239CD4E400FF34F9 /* ProjectTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73B4DA50239CD4E400FF34F9 /* ProjectTableViewCell.swift */; };
@@ -54,6 +56,8 @@
 		73447395239362FE0081BDF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		734473A223938EC90081BDF4 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		734473A42393922E0081BDF4 /* TaskManagerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskManagerModel.swift; sourceTree = "<group>"; };
+		736E993F23A5E3FC00514807 /* ProjectPropertyKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectPropertyKey.swift; sourceTree = "<group>"; };
+		736E994123A5E70100514807 /* TaskPropertyKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskPropertyKey.swift; sourceTree = "<group>"; };
 		738D6BB5239DCE5200ED6C2C /* Project.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Project.swift; sourceTree = "<group>"; };
 		738D6BB7239DD47E00ED6C2C /* ProjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ProjectViewController.swift; path = TaskManager/ProjectViewController.swift; sourceTree = SOURCE_ROOT; };
 		73B4DA50239CD4E400FF34F9 /* ProjectTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectTableViewCell.swift; sourceTree = "<group>"; };
@@ -141,6 +145,8 @@
 				734473A42393922E0081BDF4 /* TaskManagerModel.swift */,
 				734473A223938EC90081BDF4 /* Task.swift */,
 				738D6BB5239DCE5200ED6C2C /* Project.swift */,
+				736E993F23A5E3FC00514807 /* ProjectPropertyKey.swift */,
+				736E994123A5E70100514807 /* TaskPropertyKey.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -250,10 +256,12 @@
 				732CC2AE23948F5B008426E5 /* TimerViewController.swift in Sources */,
 				734473A323938EC90081BDF4 /* Task.swift in Sources */,
 				738D6BB8239DD47E00ED6C2C /* ProjectViewController.swift in Sources */,
+				736E994223A5E70100514807 /* TaskPropertyKey.swift in Sources */,
 				732CC2AC2393FA6F008426E5 /* TaskTableViewController.swift in Sources */,
 				734473A52393922E0081BDF4 /* TaskManagerModel.swift in Sources */,
 				73B4DA51239CD4E400FF34F9 /* ProjectTableViewCell.swift in Sources */,
 				732CC2A82393D6FA008426E5 /* Utility.swift in Sources */,
+				736E994023A5E3FC00514807 /* ProjectPropertyKey.swift in Sources */,
 				73447381239362FC0081BDF4 /* TaskViewController.swift in Sources */,
 				73B4DA59239CF61E00FF34F9 /* ColorCollectionViewCell.swift in Sources */,
 				7344737D239362FC0081BDF4 /* AppDelegate.swift in Sources */,
