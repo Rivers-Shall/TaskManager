@@ -14,5 +14,5 @@ class ProjectPropertyKey {
     static let defaultPomodoroDuration = "defaultPomodoroDuration"
     static let defaultDeadline = "defaultDeadline"
     
-    static let validID = "validID"
+    static let validID = "ProjectValidID"
 }

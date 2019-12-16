@@ -30,6 +30,7 @@ class TaskManagerModel {
     static let DocumentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
     static let TaskArchiveURL = DocumentsDirectory.appendingPathComponent("tasks")
     static let ProjectArchiveURL = DocumentsDirectory.appendingPathComponent("projects")
+    static let IdArchiveURL = DocumentsDirectory.appendingPathComponent("validIds")
     
     // MARK: Static Method
     static func getInstance() -> TaskManagerModel {
@@ -210,6 +211,8 @@ class TaskManagerModel {
                 Task(name: "task12", deadline: Date().addingTimeInterval(24 * 3600), pomodoroDuration: TimeInterval(5 * 60), project: projects[1])
             ]
         }
+        
+        loadIds()
     }
     
     private func saveTasks() {
@@ -231,6 +234,15 @@ class TaskManagerModel {
     }
     
     private func saveAll() {
+        let coder = NSKeyedArchiver(requiringSecureCoding: false)
+        coder.encode(Int64(Project.validID), forKey: ProjectPropertyKey.validID)
+        coder.encode(Int64(Task.validID), forKey: TaskPropertyKey.validID)
+        do {
+            try coder.encodedData.write(to: TaskManagerModel.IdArchiveURL)
+        } catch {
+            print("Cannot write to save file: " + error.localizedDescription)
+        }
+        
         saveTasks()
         saveProjects()
     }
@@ -255,5 +267,20 @@ class TaskManagerModel {
         return try! NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(projectData)
             as? [Project]
             ?? [Project]()
+    }
+    
+    private func loadIds() {
+        guard let idData = try? Data(contentsOf: TaskManagerModel.IdArchiveURL) else {
+            print("Cannot load ids")
+            return
+        }
+        
+        do {
+            let decoder = try NSKeyedUnarchiver(forReadingFrom: idData)
+            Project.validID = Int(decoder.decodeInt64(forKey: ProjectPropertyKey.validID))
+            Task.validID = Int(decoder.decodeInt64(forKey: TaskPropertyKey.validID))
+        } catch {
+            print("cannot construct decoder from data")
+        }
     }
 }

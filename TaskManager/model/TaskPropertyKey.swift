@@ -18,5 +18,5 @@ class TaskPropertyKey {
     static let id = "id"
     static let idColor = "idColor"
     
-    static let validID = "validID"
+    static let validID = "TaskValidID"
 }
