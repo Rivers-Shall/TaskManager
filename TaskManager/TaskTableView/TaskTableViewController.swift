@@ -16,6 +16,7 @@ class TaskTableViewController: UITableViewController {
     @IBOutlet weak var addProjectButtom: UIBarButtonItem!
     
     private let model = TaskManagerModel.getInstance()
+    private let reportModel = ReportModel.getInstance()
     private var projectExpanded = [Bool]()
     private var projectView = true
     
@@ -281,6 +282,7 @@ class TaskTableViewController: UITableViewController {
             let (projectIndex, taskIndex) = projectAndTaskIndex(of: indexPath.row)
             destTimerView.task = model.getTask(taskIndex!, in: projectIndex)
             destTimerView.pomodoroTime = model.getTask(taskIndex!, in: projectIndex).pomodoroDuration ?? 0
+            destTimerView.countUp = model.getTask(taskIndex!, in: projectIndex).pomodoroDuration == nil
         case "AddNewTask":
             guard let destTaskView = segue.destination as? TaskViewController else {
                 fatalError("showDetail not to taskView")
@@ -315,6 +317,7 @@ class TaskTableViewController: UITableViewController {
             }
         } else if let timerController = sender.source as? TimerViewController, let newTask = timerController.task {
             model.addOrUpdate(task : newTask, in: newTask.project)
+            reportModel.complete(task: newTask, from: timerController.startTime!, to: timerController.endTime!)
         } else {
             fatalError()
         }

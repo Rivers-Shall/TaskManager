@@ -46,6 +46,17 @@ class Utility {
         }
     }
     
+    static func hourAndMinString(from time : Date) -> String {
+        let components = userCalendar.dateComponents([.hour, .minute], from: time)
+        
+        return String(format: "%02d:%02d", components.hour!, components.minute!)
+    }
+    
+    static func intervalString(from startTime : Date, to endTime : Date) -> String {
+        return hourAndMinString(from: startTime) +
+        " -- " +
+        hourAndMinString(from: endTime)
+    }
     private init() {
         
     }

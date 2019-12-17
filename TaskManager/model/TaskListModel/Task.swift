@@ -35,7 +35,7 @@ class Task : NSObject, NSCoding {
         if let duration = self.pomodoroDuration {
             return Utility.durationString(for: duration)
         } else {
-            return "Already devoted \(self.timeUsed / 3600) h"
+            return "Already devoted \(String(format: "%.2f", self.timeUsed / 3600)) h"
         }
     }
     

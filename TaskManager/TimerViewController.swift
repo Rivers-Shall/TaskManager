@@ -25,6 +25,8 @@ class TimerViewController: UIViewController {
         }
     }
     var countUp = false
+    var startTime : Date?
+    var endTime : Date?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,6 +39,7 @@ class TimerViewController: UIViewController {
             self.duration += 1
             self.updateTimerLabel(Timer)
         }
+        startTime = Date()
         self.timer = timer
         timerLabel.text = "\(String(format: "%02d", time / 60)):\(String(format: "%02d", time % 60))"
         //timer.fire()
@@ -55,6 +58,7 @@ class TimerViewController: UIViewController {
         timer.invalidate()
         task?.pomodoroUsed += 1
         task?.timeUsed += TimeInterval(duration)
+        endTime = Date()
         self.performSegue(withIdentifier: "unwindToTaskTable", sender: self)
     }
 
