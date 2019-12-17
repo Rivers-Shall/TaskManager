@@ -33,6 +33,14 @@ class TaskTableViewController: UITableViewController {
         }
         EditButtom.title = tableView.isEditing ? "Done" : "Edit"
         projectDeadlineViewButton.title = "<->"
+        
+        // MARK: 查看是否之前有未完成的任务计时
+        let (task, startTime) = CurrentTaskModel.getInstance().getCurrentTaskAndStartTime()
+        if let task = task, let startTime = startTime {
+            performSegue(withIdentifier: "StartTimer", sender: nil)
+        } else if task != nil && startTime != nil {
+            fatalError()
+        }
     }
     
     // MARK: Edit Buttom
@@ -267,22 +275,32 @@ class TaskTableViewController: UITableViewController {
             }
             destProjectView.project = model.getProject(at: projectIndex)
         case "StartTimer":
-            guard let destTimerView = segue.destination as? TimerViewController else {
-                fatalError("StartTimer not to TimerView")
+            if sender == nil {
+                // 之前有未完成的任务计时
+                guard let destTimerView = segue.destination as? TimerViewController else {
+                    fatalError("StartTimer not to TimerView")
+                }
+                let (task, startTime) = CurrentTaskModel.getInstance().getCurrentTaskAndStartTime()
+                destTimerView.task = task
+                destTimerView.startTime = startTime
+            } else {
+                guard let destTimerView = segue.destination as? TimerViewController else {
+                    fatalError("StartTimer not to TimerView")
+                }
+                guard let sender = sender as? UIButton else {
+                    fatalError("sender not Button")
+                }
+                guard let senderCell = sender.superview?.superview?.superview as? TaskTableViewCell else {
+                    fatalError("sender button not in TaskTableViewCell")
+                }
+                guard let indexPath = tableView.indexPath(for: senderCell) else {
+                    fatalError("sender cell ont in table")
+                }
+                let (projectIndex, taskIndex) = projectAndTaskIndex(of: indexPath.row)
+                destTimerView.task = model.getTask(taskIndex!, in: projectIndex)
+                destTimerView.pomodoroTime = model.getTask(taskIndex!, in: projectIndex).pomodoroDuration ?? 0
+                destTimerView.countUp = model.getTask(taskIndex!, in: projectIndex).pomodoroDuration == nil
             }
-            guard let sender = sender as? UIButton else {
-                fatalError("sender not Button")
-            }
-            guard let senderCell = sender.superview?.superview?.superview as? TaskTableViewCell else {
-                fatalError("sender button not in TaskTableViewCell")
-            }
-            guard let indexPath = tableView.indexPath(for: senderCell) else {
-                fatalError("sender cell ont in table")
-            }
-            let (projectIndex, taskIndex) = projectAndTaskIndex(of: indexPath.row)
-            destTimerView.task = model.getTask(taskIndex!, in: projectIndex)
-            destTimerView.pomodoroTime = model.getTask(taskIndex!, in: projectIndex).pomodoroDuration ?? 0
-            destTimerView.countUp = model.getTask(taskIndex!, in: projectIndex).pomodoroDuration == nil
         case "AddNewTask":
             guard let destTaskView = segue.destination as? TaskViewController else {
                 fatalError("showDetail not to taskView")

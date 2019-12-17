@@ -197,19 +197,30 @@
                                     <action selector="quitButtonTapped:" destination="nmy-Vi-wuR" eventType="touchUpInside" id="b43-VY-NX4"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mmf-N4-9Hc" userLabel="Name">
+                                <rect key="frame" x="20" y="215.66666666666666" width="374" height="36"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="DQM-bI-Zkt" firstAttribute="centerY" secondItem="CA4-8X-7Hg" secondAttribute="centerY" id="FrL-ZR-Jgt"/>
+                            <constraint firstItem="mmf-N4-9Hc" firstAttribute="top" secondItem="hc3-GT-4dA" secondAttribute="bottom" multiplier="0.25" id="JJe-xO-C2Q"/>
                             <constraint firstItem="hc3-GT-4dA" firstAttribute="bottom" secondItem="vTe-QM-PLG" secondAttribute="bottom" constant="141" id="LEU-QW-JqE"/>
+                            <constraint firstItem="mmf-N4-9Hc" firstAttribute="leading" secondItem="hc3-GT-4dA" secondAttribute="leading" constant="20" id="S0b-Pl-gLp"/>
                             <constraint firstItem="DQM-bI-Zkt" firstAttribute="centerX" secondItem="hc3-GT-4dA" secondAttribute="centerX" id="VvN-V5-cJu"/>
                             <constraint firstItem="vTe-QM-PLG" firstAttribute="centerX" secondItem="DQM-bI-Zkt" secondAttribute="centerX" id="hCI-H9-94D"/>
                             <constraint firstItem="hc3-GT-4dA" firstAttribute="trailing" secondItem="DQM-bI-Zkt" secondAttribute="trailing" constant="20" id="nBh-kg-ShQ"/>
+                            <constraint firstItem="hc3-GT-4dA" firstAttribute="trailing" secondItem="mmf-N4-9Hc" secondAttribute="trailing" constant="20" id="nK5-Jf-CqV"/>
+                            <constraint firstItem="mmf-N4-9Hc" firstAttribute="centerX" secondItem="hc3-GT-4dA" secondAttribute="centerX" id="no6-jQ-qbn"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="hc3-GT-4dA"/>
                     </view>
                     <navigationItem key="navigationItem" id="toP-Ff-Nc9"/>
                     <connections>
+                        <outlet property="taskNameLabel" destination="mmf-N4-9Hc" id="HsA-gM-Abo"/>
                         <outlet property="timerLabel" destination="DQM-bI-Zkt" id="vdW-lh-G74"/>
                         <segue destination="sfq-GB-eQG" kind="unwind" identifier="unwindToTaskTable" unwindAction="unwindToTaskTable:" id="wEt-et-Ter"/>
                     </connections>
@@ -896,6 +907,7 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="cPo-uI-cGe" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Wq8-3q-ukH">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
