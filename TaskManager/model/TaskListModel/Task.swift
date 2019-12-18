@@ -76,17 +76,17 @@ class Task : NSObject, NSCoding {
     required convenience init?(coder: NSCoder) {
         // everything is required
         guard let name = coder.decodeObject(forKey: TaskPropertyKey.name) as? String else {
-            os_log("cannot decode name for task")
+            print("cannot decode name for task")
             return nil
         }
         
         guard let deadline = coder.decodeObject(forKey: TaskPropertyKey.deadline) as? Date? else {
-            os_log("cannot decode deadline for task")
+            print("cannot decode deadline for task")
             return nil
         }
         
         guard let pomodoroDuration = coder.decodeObject(forKey: TaskPropertyKey.pomodoroDuration) as? TimeInterval? else {
-            os_log("cannot decode pomodoroDuration for task")
+            print("cannot decode pomodoroDuration for task")
             return nil
         }
         
@@ -95,14 +95,14 @@ class Task : NSObject, NSCoding {
         let pomodoroUsed = coder.decodeInteger(forKey: TaskPropertyKey.pomodoroUsed)
         
         guard let project = coder.decodeObject(forKey: TaskPropertyKey.project) as? Project else {
-            os_log("cannot decode project for task")
+            print("cannot decode project for task")
             return nil
         }
         
         let id = coder.decodeInteger(forKey: TaskPropertyKey.id)
         
         guard let idColor = coder.decodeObject(forKey: TaskPropertyKey.idColor) as? UIColor else {
-            os_log("cannot decode idColor for task")
+            print("cannot decode idColor for task")
             return nil
         }
         

@@ -49,42 +49,20 @@ class CurrentTaskModel {
     
     func saveCurrentTaskAndStartTime() {
         do {
-           // if let currentTask = currentTask, let startTime = startTime {
-                let data = try NSKeyedArchiver.archivedData(withRootObject: currentTask, requiringSecureCoding: false)
-                try data.write(to: CurrentTaskModel.CurrentTaskArchiveURL)
-                let data2 = try NSKeyedArchiver.archivedData(withRootObject: startTime, requiringSecureCoding: false)
-                try data2.write(to: CurrentTaskModel.StartTimeArchiveURL)
-                
-                let encoder = NSKeyedArchiver(requiringSecureCoding: false)
-                encoder.encode(currentTask, forKey: CurrentTaskModelPropertyKey.currentTask)
-                encoder.encode(startTime, forKey: CurrentTaskModelPropertyKey.startTime)
-                try encoder.encodedData.write(to: CurrentTaskModel.TestArchiveURL)
-           // }
+            let data = try NSKeyedArchiver.archivedData(withRootObject: currentTask as Any, requiringSecureCoding: false)
+            try data.write(to: CurrentTaskModel.CurrentTaskArchiveURL)
+            let data2 = try NSKeyedArchiver.archivedData(withRootObject: startTime as Any, requiringSecureCoding: false)
+            try data2.write(to: CurrentTaskModel.StartTimeArchiveURL)
         } catch {
             print("Cannot save to file: " + error.localizedDescription)
-        }
-        
-        do {
-            let data = try Data(contentsOf: CurrentTaskModel.CurrentTaskArchiveURL)
-            let currentTask = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? Task
-            let data2 = try Data(contentsOf: CurrentTaskModel.StartTimeArchiveURL)
-            let startTime = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data2) as? Date
-            print("\(currentTask) \(startTime)")
-            
-            let testData = try Data(contentsOf: CurrentTaskModel.TestArchiveURL)
-            let decoder = try NSKeyedUnarchiver(forReadingFrom: testData)
-            let currentTask2 = decoder.decodeObject(forKey: CurrentTaskModelPropertyKey.currentTask)
-            let startTime2 = decoder.decodeObject(forKey: CurrentTaskModelPropertyKey.startTime)
-            print("2: \(currentTask2) \(startTime2)")
-        } catch {
-            print("No current task")
         }
     }
     
     func getCurrentTaskAndStartTime() -> (Task?, Date?) {
         loadCurrentTaskAndStartTime()
-        if let currentTask = currentTask, let startTime = startTime {
-            if Date().timeIntervalSince(startTime) >= currentTask.pomodoroDuration! {
+        if let currentTask = currentTask, let startTime = startTime,
+            let pomodoroDuration = currentTask.pomodoroDuration {
+            if Date().timeIntervalSince(startTime) >= pomodoroDuration {
                 self.currentTask = nil
                 self.startTime = nil
             }

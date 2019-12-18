@@ -36,7 +36,7 @@ class TaskTableViewController: UITableViewController {
         
         // MARK: 查看是否之前有未完成的任务计时
         let (task, startTime) = CurrentTaskModel.getInstance().getCurrentTaskAndStartTime()
-        if let task = task, let startTime = startTime {
+        if let _ = task, let _ = startTime {
             performSegue(withIdentifier: "StartTimer", sender: nil)
         } else if task != nil && startTime != nil {
             fatalError()
@@ -283,6 +283,7 @@ class TaskTableViewController: UITableViewController {
                 let (task, startTime) = CurrentTaskModel.getInstance().getCurrentTaskAndStartTime()
                 destTimerView.task = task
                 destTimerView.startTime = startTime
+                destTimerView.countUp = task?.pomodoroDuration == nil
             } else {
                 guard let destTimerView = segue.destination as? TimerViewController else {
                     fatalError("StartTimer not to TimerView")
