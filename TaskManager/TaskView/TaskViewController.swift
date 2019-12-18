@@ -182,6 +182,8 @@ extension TaskViewController : UIPickerViewDelegate, UIPickerViewDataSource {
                 return "Count Up"
             case 1:
                 return "No Time Devoted"
+            case 2:
+                return "test 10 s"
             default:
                 return "\((row - 1) * 5) min"
             }
@@ -200,7 +202,13 @@ extension TaskViewController : UIPickerViewDelegate, UIPickerViewDataSource {
             if row == 0 {
                 task?.pomodoroDuration = nil
             } else {
-                task?.pomodoroDuration = TimeInterval((row - 1) * 5 * 60)
+                if row == 1 {
+                    task?.pomodoroDuration = 0
+                } else if row == 2 {
+                    task?.pomodoroDuration = 10
+                } else {
+                    task?.pomodoroDuration = TimeInterval((row - 2) * 5 * 60)
+                }
             }
         } else if (picker == projectPicker) {
             projectPickerLabel.text = pickerView(picker, titleForRow: row, forComponent: 0)

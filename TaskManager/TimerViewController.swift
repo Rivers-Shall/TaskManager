@@ -41,6 +41,10 @@ class TimerViewController: UIViewController {
         } else {
             duration = Int(Date().timeIntervalSince(startTime!))
         }
+        
+        if !countUp && task!.pomodoroDuration! > 0 {
+            prepareNotification()
+        }
         let timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { (Timer) in
             if !self.countUp {
                 self.time = Int(self.task!.pomodoroDuration!) - self.duration
@@ -66,15 +70,29 @@ class TimerViewController: UIViewController {
     
     func quit(_ timer : Timer) {
         timer.invalidate()
-        task?.pomodoroUsed += 1
-        task?.timeUsed += TimeInterval(duration)
         endTime = Date()
         currentTaskModel.complete()
+        if time >= 0 {
+            cancelNotification()
+        }
         self.performSegue(withIdentifier: "unwindToTaskTable", sender: self)
     }
 
     @IBAction func quitButtonTapped(_ sender: UIButton) {
         quit(self.timer!)
+    }
+    
+    func prepareNotification() {
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: task!.pomodoroDuration!, repeats: false)
+        let content = UNMutableNotificationContent()
+        content.title = "\(task!.name) Completed"
+        content.sound = UNNotificationSound.default
+        let request = UNNotificationRequest(identifier: "\(task!.name)", content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+    }
+    
+    func cancelNotification() {
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
     }
     /*
     // MARK: - Navigation

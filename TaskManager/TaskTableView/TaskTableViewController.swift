@@ -334,10 +334,7 @@ class TaskTableViewController: UITableViewController {
                 model.addOrUpdate(task: newTask, in: newTask.project)
                 tableView.reloadData()
             }
-        } else if let timerController = sender.source as? TimerViewController, let newTask = timerController.task {
-            model.addOrUpdate(task : newTask, in: newTask.project)
-            reportModel.complete(task: newTask, from: timerController.startTime!, to: timerController.endTime!)
-        } else {
+        } else if !(sender.source is TimerViewController) {
             fatalError()
         }
     }

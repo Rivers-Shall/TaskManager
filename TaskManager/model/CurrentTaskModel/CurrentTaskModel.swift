@@ -63,8 +63,7 @@ class CurrentTaskModel {
         if let currentTask = currentTask, let startTime = startTime,
             let pomodoroDuration = currentTask.pomodoroDuration {
             if Date().timeIntervalSince(startTime) >= pomodoroDuration {
-                self.currentTask = nil
-                self.startTime = nil
+                complete()
             }
         }
         saveCurrentTaskAndStartTime()
@@ -72,6 +71,14 @@ class CurrentTaskModel {
     }
     
     func complete() {
+        currentTask!.pomodoroUsed += 1
+        var endTime = Date()
+        if let pomodoroDuration = currentTask!.pomodoroDuration {
+            currentTask!.timeUsed += pomodoroDuration
+            endTime = startTime!.addingTimeInterval(pomodoroDuration)
+        }
+        TaskManagerModel.getInstance().addOrUpdate(task: currentTask!, in: currentTask!.project)
+        ReportModel.getInstance().complete(task: currentTask!, from: startTime!, to: endTime)
         currentTask = nil
         startTime = nil
         saveCurrentTaskAndStartTime()
