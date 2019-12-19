@@ -189,8 +189,7 @@ class TaskManagerModel {
         projects += loadProjects()
         if projects.count == 0 {
             projects += [
-                Project(name: "Stand Alone", defaultPomodoroDuration: 25 * 60, defaultDeadline: Date()),
-                Project(name: "iOS APP", defaultPomodoroDuration: 25 * 60, defaultDeadline: Date())
+                Project(name: "Stand Alone", defaultPomodoroDuration: 25 * 60, defaultDeadline: Date())
             ]
         }
         
@@ -204,11 +203,7 @@ class TaskManagerModel {
                 Task(name: "编辑模式可以重排项目和任务", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
                 Task(name: "编辑模式快速在项目间移动任务", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
                 Task(name: "Start按钮开启番茄钟", deadline: Date(), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
-                Task(name: "task8", deadline: Date().addingTimeInterval(24 * 3600), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
-                Task(name: "task9", deadline: Date().addingTimeInterval(24 * 3600), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
-                Task(name: "task10", deadline: Date().addingTimeInterval(24 * 3600), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
-                Task(name: "task11", deadline: Date().addingTimeInterval(24 * 3600), pomodoroDuration: TimeInterval(5 * 60), project: projects[0]),
-                Task(name: "task12", deadline: Date().addingTimeInterval(24 * 3600), pomodoroDuration: TimeInterval(5 * 60), project: projects[1])
+                Task(name: "项目格子中的+号新建任务", deadline: Date().addingTimeInterval(24 * 3600), pomodoroDuration: TimeInterval(5 * 60), project: projects[0])
             ]
         }
         

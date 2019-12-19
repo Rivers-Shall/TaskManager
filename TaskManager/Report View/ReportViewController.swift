@@ -29,6 +29,14 @@ class ReportViewController: UIViewController {
         todayReportTable.dataSource = self
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        
+        timeDevotedLabel.text = "\(String(format: "%.2f", reportModel.getTimeDevoted() / 3600))"
+        pomodoroDevoted.text = "\(reportModel.getPomodoroDevoted())"
+        
+        todayReportTable.reloadData()
+    }
+    
 
     /*
     // MARK: - Navigation
